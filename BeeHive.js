@@ -6,11 +6,6 @@
 //======================================
 
     /* ----- Do not allow to launch more than once ----- */
-    // if (window.hiveLoaded) {
-    //     // alert('Bee Hive program has already been loaded.\nPlease buzz on by (apian for continue).');
-    //     customAlert ('The Bee Hive program has already been loaded.  Please buzz on by (Apian language for continue).', 'PLEASE NOTE', 'Continue')
-    //     return;
-    // }
     window.hiveLoaded = true;
 
     /* ----- Do not launch while on Welcome or Queen Bee pages ----- */
@@ -213,7 +208,7 @@ async function main() {
         }
     }
 
-    /* ----- Create DOM for added HTML ----- */
+    /* ----- Create DOM for Bee Hive HTML ----- */
     function setUpHintDiv() {
         let gameScreen;
         if (devicePhone) {
@@ -231,7 +226,7 @@ async function main() {
         hintDiv.style.padding = '10px';
         container.append(hintDiv);
 
-        // Our added HTML
+        // Bee Hive HTML
         hintDiv.innerHTML = `
         <table>
             <td id="metastats1">Total points:&nbsp<br>Total words:&nbsp<br>Words Found:&nbsp</td>
