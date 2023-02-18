@@ -37,19 +37,18 @@ async function main() {
     // MAIN CONSTANTS AND VARIABLES
     //--------------------------------------
 
-    /* ----- System data ----- */
-    const devicePhone = detectPhoneDevice();    // DEBUG: either should work, but .orientation will lose support
-    // const devicePhone = (window.orientation === 'undefined') ? false : true;
+    // System data
+    const devicePhone = detectPhoneDevice();
+    const HintsHTML = await getHints();         // data from Spelling Bee Hints page
     const hintDiv = setUpHintDiv();             // initialize DOM
-    const HintsHTML = await getHints();         // data from Spelling Bee page
 
     // Settings
     let ShowBlankCells = false;                 // toggle: show/hide empty data cells           
     let ShowRemaining = false;                  // toggle: show remaining vs found words
     let SubTotalsAtTop = false;                 // toggle: placement of subtotal line
     let SaveSetting = false;                    // toggle: save above in cookie
+    let KLUDGE = true;                          // DEBUG
 
-    // Elements
     const El = {
         MetaStats1: document.getElementById('metastats1'),
         MetaStats2: document.getElementById('metastats2'),
@@ -63,8 +62,8 @@ async function main() {
         SubTotalsAtTop: document.getElementById('subTotalsAtTop'),
         SaveSettings: document.getElementById('saveSettings'),
         WordList: document.querySelector('.sb-wordlist-items-pag'),
-        WelcomePage: document.querySelector('.pz-moment__button.primary'),
-        QueenBeePage: document.getElementById('js-hook-pz-moment__congrats'),
+        OpeningPage: document.querySelector('.pz-moment__button.primary'),
+        QueenBeePage: document.querySelector('.pz-moment__close'),
      }
 
     // Table data
@@ -134,10 +133,10 @@ async function main() {
 
     /* ----- Detect addition to Word List ----- */
     //       main activity during game play
-    const observeWordList = new MutationObserver(() => {
+    const observer = new MutationObserver(() => {
         UpdateList();
     });
-    observeWordList.observe(El.WordList, {childList: true});
+    observer.observe(El.WordList, {childList: true});
 
     /* ----- Toggle hiding blank cells ----- */
     El.ShowBlankCells.addEventListener('click', ToggleHiddenCells);
@@ -149,19 +148,64 @@ async function main() {
     /* ----- Toggle placement of subtotal line ----- */
     El.SubTotalsAtTop.addEventListener('click', ToggleSubtotals);
 
-    /* ----- Save settings ----- */
+    /* ----- Save settings toggle ----- */
     El.SaveSettings.addEventListener('click', SaveSettings);
 
-    /* ----- Detect Queen Bee page pop-up ----- */
-    //       then hide Bee Hive display
-    const observeQBPage = new MutationObserver(() => {
-        HideOnQBPopup();
-    });
-    observeQBPage.observe(El.QueenBeePage, {attributes: true});
+//======================================
+// GET/SET SYSTEM DATA
+//======================================
 
-//======================================
-// GET SYSTEM DATA
-//======================================
+    /* ----- Open Today's Hints page for data ----- */
+    async function getHints() {
+        const hintsUrl = 'https://www.nytimes.com/' +
+        window.gameData.today.printDate.replaceAll('-', '/') +
+            '/crosswords/spelling-bee-forum.html';
+
+        const hints = await fetch(hintsUrl).then(response => response.text()).then(html => {
+            const div = document.createElement('div');
+            div.innerHTML = html;                                       // translates string to DOM
+            return div.querySelector('.interactive-body > div');
+        });
+        return hints;
+    }
+
+    /* ----- Detect device ----- */
+    function detectPhoneDevice () {
+        return false;
+        // if (navigator.userAgent.match(/Android/i)
+        // || navigator.userAgent.match(/webOS/i)
+        // || navigator.userAgent.match(/iPhone/i)
+        // || navigator.userAgent.match(/iPad/i)
+        // || navigator.userAgent.match(/iPod/i)
+        // || navigator.userAgent.match(/BlackBerry/i)
+        // || navigator.userAgent.match(/Windows Phone/i)) {
+        //    return true ;
+        // } else {
+        //    return false ;
+        // }
+     }
+    /* ----- Open Rankings pop-up for data ----- */
+    async function getGeniusScore() {
+        [...document.querySelectorAll(".pz-dropdown__menu-item")][1].click();
+        let element = await waitForElement('.sb-modal-ranks__list');
+        let score = element.querySelectorAll('td')[3].innerText.replace(/\D/g, '');        
+        document.querySelector('.sb-modal-close').click();
+        return score;
+
+        function waitForElement(selector) {
+            return new Promise(resolveElement => {
+                const checkForElement = () => {
+                    let element = document.querySelector(selector);
+                    if (element) {
+                        resolveElement(element);
+                    } else {
+                        setTimeout(checkForElement, 10);
+                    }
+                };
+                checkForElement();
+            });
+        }
+    }
 
     /* ----- Create DOM for Bee Hive HTML ----- */
     function setUpHintDiv() {
@@ -199,7 +243,7 @@ async function main() {
         <br><input id="showRemaining" type="checkbox">&nbspShow number of words remaining</input>
         <br><input id="subTotalsAtTop" type="checkbox">&nbspPlace subtotal line above letter tallies</input>
         <br><input id="saveSettings" type="checkbox">&nbspSave settings</input>
-        <br><br>Bee Hive Release 1.21
+        <br><br>Bee Hive Release 1.2
         <style>
             #metastats1 {
                 font-family: Arial, Helvetica, sans-serif;
@@ -246,64 +290,11 @@ async function main() {
                 font-size: 90%;
             }
             </style>
-        `;
+                   `;
         return hintDiv;
     }
 
-    /* ----- Detect device ----- */
-    function detectPhoneDevice () {
-        return false;
-        // if (navigator.userAgent.match(/Android/i)
-        // || navigator.userAgent.match(/webOS/i)
-        // || navigator.userAgent.match(/iPhone/i)
-        // || navigator.userAgent.match(/iPad/i)
-        // || navigator.userAgent.match(/iPod/i)
-        // || navigator.userAgent.match(/BlackBerry/i)
-        // || navigator.userAgent.match(/Windows Phone/i)) {
-        //    return true ;
-        // } else {
-        //    return false ;
-        // }
-     }
-
-    /* ----- Open Today's Hints page for data ----- */
-    async function getHints() {
-        const hintsUrl = 'https://www.nytimes.com/' +
-        window.gameData.today.printDate.replaceAll('-', '/') +
-            '/crosswords/spelling-bee-forum.html';
-
-        const hints = await fetch(hintsUrl).then(response => response.text()).then(html => {
-            const div = document.createElement('div');
-            div.innerHTML = html;                                       // translates string to DOM
-            return div.querySelector('.interactive-body > div');
-        });
-        return hints;
-    }
-
-    /* ----- Open Rankings pop-up for data ----- */
-    async function getGeniusScore() {
-        [...document.querySelectorAll(".pz-dropdown__menu-item")][1].click();
-        let element = await waitForElement('.sb-modal-ranks__list');
-        let score = element.querySelectorAll('td')[3].innerText.replace(/\D/g, '');        
-        document.querySelector('.sb-modal-close').click();
-        return score;
-
-        function waitForElement(selector) {
-            return new Promise(resolveElement => {
-                const checkForElement = () => {
-                    let element = document.querySelector(selector);
-                    if (element) {
-                        resolveElement(element);
-                    } else {
-                        setTimeout(checkForElement, 10);
-                    }
-                };
-                checkForElement();
-            });
-        }
-    }
-
-    /* ----- Saved Settings Cookie ----- */
+/* ----- Saved Settings Cookie ----- */
     function RetrieveSavedSettings () {
         let setting = getCookie("beehiveSetting");
         if (setting === "true") { 
@@ -621,7 +612,7 @@ async function main() {
 
         // Gray out and hide completed rows and columns
         TablePtrs.forEach(item => {
-            for (let col = ColStart - 1; col <= ColEnd; col++) {
+            for (let col = ColStart; col <= ColEnd; col++) {
                 for (let row = item.rowStartData; row <= item.rowEndData; row++)
                     Cell[row][col].element.removeAttribute("hidden", "");
             }
@@ -654,7 +645,7 @@ async function main() {
                             ShowBlankCells
                                 ? Cell[row][col].element.removeAttribute("hidden")
                                 : Cell[row][col].element.setAttribute("hidden", "");
-                    }
+                        }
                     }
                 }
             }
@@ -662,12 +653,12 @@ async function main() {
             for (let col = ColStart; col <= ColEnd; col++) {
                 if ((Table[item.rowTotal][col] === 0)) {
                     for (let row = item.rowHeader; row <= item.rowEndChar1; row++)
-                    Cell[row][col].element.setAttribute("hidden", "");
+                        Cell[row][col].element.setAttribute("hidden", "");
                 }
             }
             // Display FOUND vs REMAINING words
             if (ShowRemaining) {
-                for (let col = ColStart - 1; col <= ColEnd; col++) {
+                for (let col = ColStart; col <= ColEnd; col++) {
                     for (let row = item.rowStartData; row <= item.rowEndData; row++)
                         Cell[row][col].element.setAttribute("hidden", "");
                 }
@@ -682,7 +673,7 @@ async function main() {
         return;
     }
 
-    function ToggleHiddenCells (KLUDGE) {     // DEBUG - KLUDGE patch
+    function ToggleHiddenCells () {
         ShowBlankCells = !ShowBlankCells; 
         ShowBlankCells ? setCookie("beehiveBlank=true") : setCookie("beehiveBlank=false");
         TablePtrs.forEach(item => {
@@ -714,7 +705,7 @@ async function main() {
                 }
             }
         });
-        if (KLUDGE) DisplayTable();     // DEBUG
+        if (KLUDGE) DisplayTable();
         return;
     }
 
@@ -723,12 +714,12 @@ async function main() {
         ShowRemaining ? setCookie("beehiveRemaining=true") : setCookie("beehiveRemaining=false");
         if (ShowRemaining) {
             El.Legend.innerHTML = `Σ = <font color="mediumvioletred"><b>TOTAL words</b>
-            <font color="black">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp# = <strong><b>REMAINING words</b></strong>`;
+            <font color="black">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp# = <strong><b>REMAINING</b></strong> words`;
         } else {
-            El.Legend.innerHTML = `Σ = <font color="mediumvioletred"><b><strong>TOTAL</strong> words</b>
-            <font color="black">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp# = <b>FOUND words</b>`;
+            El.Legend.innerHTML = `Σ = <font color="mediumvioletred"><b><strong>TOTAL</strong></b> words
+            <font color="black">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp# = <b>FOUND</b> words`;
         }
-        DisplayTable ();
+        DisplayTable();
     return;
     }
 
@@ -784,8 +775,6 @@ async function main() {
             for (let row = item.rowHeader + 1; row <= item.rowEndChar1; row++) {
                 Cell[row][0].element.style.color = 'black';
                 Cell[row][1].element.style.color = 'mediumvioletred';
-                // Cell[row][2].element.style.color = 'black';
-                // Cell[row][3].element.style.color = 'black';
             }
          })
 
@@ -794,24 +783,18 @@ async function main() {
             Char2Row[char] -= chr;
         }
 
-        // DEBUG - patch to restore proper DisplayTable
-        let KLUDGE = false;
-        ToggleHiddenCells (KLUDGE);
+        // DEBUG - patch
+        Kludge();
+        // DisplayTable();
+        return;
+    }
+
+    function Kludge () {    // DEBUG - patch
+        KLUDGE = false;
+        ToggleHiddenCells ();
         KLUDGE = true;
-        ToggleHiddenCells (KLUDGE);
-        // DisplayTable ();
-
+        ToggleHiddenCells ();
         return;
     }
-
-    function HideOnQBPopup () {
-        if (El.QueenBeePage.clientHeight > 0) {
-            hintDiv.style.visibility = 'hidden';
-        } else {
-            hintDiv.style.visibility = 'visible';
-        }
-        return;
-    }
-
 }       // end of main function
 })();   // end of outer shell function

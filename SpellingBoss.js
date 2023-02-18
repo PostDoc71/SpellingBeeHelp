@@ -5,8 +5,14 @@
 // LOAD PROGRAM AFTER CONDITIONS MET
 //======================================
 
+/* ----- Stop if under maintenance ----- */
+const oops = false;
+// const oops = true;
+if (oops) {
+    customAlert('Bee Hive temporarily out of order.  Undergoing maintenance.', 'OOPS', 'Continue')
+
 /* ----- Do not allow to launch more than once ----- */
-if (window.hiveLoaded) {
+} else if (window.hiveLoaded) {
     customAlert ('The Bee Hive program has already been loaded.  Please buzz on by (Apian language for continue).',
     'PLEASE NOTE', 'Continue');
 
@@ -14,7 +20,7 @@ if (window.hiveLoaded) {
 } else if (document.URL === 'https://www.nytimes.com/puzzles/spelling-bee') {
     fetch('https://raw.githubusercontent.com/PostDoc71/SpellingBeeHelp/main/BeeHive.js').then(r => r.text()).then(t => eval(t))
 } else {
-    customAlert('This bookmarklet can only be launched from NYT Spelling Bee main page.',
+    customAlert('This bookmarklet can only be launched from the NYT Spelling Bee main page.',
     'ATTENTION', 'OK');
 }
 
