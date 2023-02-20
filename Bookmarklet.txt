@@ -1,1 +1,10 @@
+// ===========================
+// Bookmarklet text-more complicated to set up
 javascript:fetch('https://raw.githubusercontent.com/PostDoc71/SpellingBeeHelp/main/SpellingBoss.js').then(r => r.text()).then(t => eval(t))
+
+// ===========================
+// Drag and drop this bookmark
+<!DOCTYPE html>
+<html>
+    <a href="javascript:fetch('https://raw.githubusercontent.com/PostDoc71/SpellingBeeHelp/main/SpellingBoss.js').then(r => r.text()).then(t => eval(t))">Bee Hive</a>
+</html>
