@@ -11,7 +11,7 @@ while on the Spelling Bee web page.
 1.  From Bookmark manager, create a new boookmark.	
 	- Copy the block of text below:
 		<dt>
-            <a href="javascript:fetch('https://raw.githubusercontent.com/PostDoc71/SpellingBeeHelp/main/SpellingBoss.js').then(r => r.text()).then(t => eval(t))">Bee Hive</a>
+            "javascript:fetch('https://raw.githubusercontent.com/PostDoc71/SpellingBeeHelp/main/SpellingBoss.js').then(r => r.text()).then(t => eval(t))"
 		</dt>
 
         <dt><table id="bookmarklet" word-wrap="normal"><tr>
