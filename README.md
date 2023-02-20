@@ -7,8 +7,9 @@ To use this program, you must start it from a bookmarklet.  You only need to do 
 bookmarklet installation in step 1 once.  Afterwards just click on your bookmarklet<br>
 while on the Spelling Bee web page.
 
-
-1.  From Bookmark manager, create a new boookmark.	
+a 
+1.  From Bookmark manager, create a new boookmark.	(For simplified process, go to<br>
+	'https://postdoc71.github.io/SpellingBeeHelper/')
 	- Copy the block of text below:
         <dt><table word-wrap="normal"><tr>
 		<td><pre> javascript:fetch('https://raw.githubusercontent.com/PostDoc71/SpellingBeeHelp/main/SpellingBoss.js').then(r => r.text()).then(t => eval(t)) </pre><td>
