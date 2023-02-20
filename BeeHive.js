@@ -8,24 +8,25 @@
     /* ----- Do not allow to launch more than once ----- */
     window.hiveLoaded = true;
 
-    /* ----- Do not launch while on Welcome or Queen Bee pages ----- */
-    await waitForCondition(
-        document.getElementById('js-hook-pz-moment__welcome'),      // Welcome page
-        document.getElementById('js-hook-pz-moment__congrats'));    // Queen Bee page
     main();
 
-    function waitForCondition(welcome, queenBee) {
-        return new Promise(resolveElement => {
-            const checkForCondition = () => {           // both frames invisible
-                if (welcome.clientHeight + queenBee.clientHeight === 0) {
-                    resolveElement(true);
-                } else {
-                    setTimeout(checkForCondition, 10);
-                }
-            };
-            checkForCondition();
-        });
-    }
+    /* ----- Do not launch while on Welcome or Queen Bee pages ----- */
+    // await waitForCondition(
+    //     document.getElementById('js-hook-pz-moment__welcome'),      // Welcome page
+    //     document.getElementById('js-hook-pz-moment__congrats'));    // Queen Bee page
+
+    // function waitForCondition(welcome, queenBee) {
+    //     return new Promise(resolveElement => {
+    //         const checkForCondition = () => {           // both frames invisible
+    //             if (welcome.clientHeight + queenBee.clientHeight === 0) {
+    //                 resolveElement(true);
+    //             } else {
+    //                 setTimeout(checkForCondition, 10);
+    //             }
+    //         };
+    //         checkForCondition();
+    //     });
+    // }
       
 //======================================
 // MAIN FUNCTION
@@ -153,7 +154,7 @@ async function main() {
     El.SaveSettings.addEventListener('click', SaveSettings);
 
     /* ----- Detect Queen Bee page pop-up ----- */
-    //       then hide Bee Hive display
+    //       and hide Bee Hive display
     const observeQBPage = new MutationObserver(() => {
         HideOnQBPopup();
     });
