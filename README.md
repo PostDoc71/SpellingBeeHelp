@@ -4,12 +4,12 @@ Bee Hive inserts itself onto the NYT Spelling Bee web page, then tallies your <b
 found words onto the Spelling Bee HINTS grid.  This only works on computers, not<br>
 phones.  Stay tuned; I may make a phone version later.<br>
 To use this program, you must start it from a bookmarklet.  You only need to do the<br>
-bookmarklet installation in step 1 once.  Afterwards just click on your bookmarklet<br>
+bookmarklet installation in step 1 once.  Afterwards, just click on your bookmarklet<br>
 while on the Spelling Bee web page.
 
 a 
 1.  From Bookmark manager, create a new boookmark.	(For simplified process, go to<br>
-	'https://postdoc71.github.io/SpellingBeeHelper/index.html')
+	https://postdoc71.github.io/SpellingBeeHelp/index.html)
 	- Copy the block of text below:
         <dt><table word-wrap="normal"><tr>
 		<td><pre> javascript:fetch('https://raw.githubusercontent.com/PostDoc71/SpellingBeeHelp/main/SpellingBoss.js').then(r => r.text()).then(t => eval(t)) </pre><td>
@@ -23,7 +23,7 @@ a
 
 2.  To use:
 
-	- Launch Spelling Bee ('https://www.nytimes.com/puzzles/spelling-bee').
+	- Launch Spelling Bee (https://www.nytimes.com/puzzles/spelling-bee).
 	- Click the Bee Hive bookmarklet on your Bookmarks bar.
 
 This should ease the task of tallying your entries!<br><br>
