@@ -10,9 +10,6 @@ while on the Spelling Bee web page.
 
 1.  From Bookmark manager, create a new boookmark.	
 	- Copy the block of text below:
-		<html>
-            <a href="javascript:fetch('https://raw.githubusercontent.com/PostDoc71/SpellingBeeHelp/main/SpellingBoss.js').then(r => r.text()).then(t => eval(t))">Bee Hive</a>
-		</html>
         <dt><table word-wrap="normal"><tr>
 		<td><pre> javascript:fetch('https://raw.githubusercontent.com/PostDoc71/SpellingBeeHelp/main/SpellingBoss.js').then(r => r.text()).then(t => eval(t)) </pre><td>
 		</tr></table>
