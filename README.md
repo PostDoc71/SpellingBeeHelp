@@ -8,7 +8,7 @@ bookmarklet installation in step 1 once.  Afterwards, just click on your bookmar
 while on the Spelling Bee web page.
 
 a 
-1.  From Bookmark manager, create a new boookmark.	(For simplified process, go to<br>
+1.  From Bookmark manager, create a new boookmark.	(For a simplified process, go to<br>
 	https://postdoc71.github.io/SpellingBeeHelp/index.html)
 	- Copy the block of text below:
         <dt><table word-wrap="normal"><tr>

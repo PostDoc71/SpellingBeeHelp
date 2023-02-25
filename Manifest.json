@@ -1,0 +1,7 @@
+{
+    "name": "Bee Hive",
+    "version": "1.2.1",
+    "description": "NYT Spelling Bee automated hints tally",
+    "manifest_version": 3,
+    "author": "Karl Chun",
+}
