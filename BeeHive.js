@@ -8,8 +8,6 @@
     /* ----- Do not allow to launch more than once ----- */
     window.hiveLoaded = true;
 
-    main();
-
     /* ----- Do not launch while on Welcome or Queen Bee pages ----- */
     await waitForCondition(
         document.getElementById('js-hook-pz-moment__welcome'),      // Welcome page
@@ -28,6 +26,8 @@
         });
     }
       
+    main();
+
 //======================================
 // MAIN FUNCTION
 //======================================
