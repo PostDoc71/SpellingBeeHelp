@@ -1,32 +1,32 @@
 (async () => {            // OUTER SHELL
-'use strict';
+    'use strict';
     
 //======================================
 // LOAD PROGRAM AFTER CONDITIONS MET
 //======================================
 
-/* ----- Do not allow to launch more than once ----- */
-window.hiveLoaded = true;
+    /* ----- Do not allow to launch more than once ----- */
+    window.hiveLoaded = true;
 
-/* ----- Do not launch while on Welcome or Queen Bee pages ----- */
-await waitForCondition(
-    document.getElementById('js-hook-pz-moment__welcome'),      // Welcome page
-    document.getElementById('js-hook-pz-moment__congrats'));    // Queen Bee page
+    main();
 
-function waitForCondition(welcome, queenBee) {
-    return new Promise(resolveElement => {
-        const checkForCondition = () => {           // both frames invisible
-            if (welcome.clientHeight + queenBee.clientHeight === 0) {
-                resolveElement(true);
-            } else {
-                setTimeout(checkForCondition, 10);
-            }
-        };
-        checkForCondition();
-    });
-}
+    /* ----- Do not launch while on Welcome or Queen Bee pages ----- */
+    await waitForCondition(
+        document.getElementById('js-hook-pz-moment__welcome'),      // Welcome page
+        document.getElementById('js-hook-pz-moment__congrats'));    // Queen Bee page
 
-main();
+    function waitForCondition(welcome, queenBee) {
+        return new Promise(resolveElement => {
+            const checkForCondition = () => {           // both frames invisible
+                if (welcome.clientHeight + queenBee.clientHeight === 0) {
+                    resolveElement(true);
+                } else {
+                    setTimeout(checkForCondition, 10);
+                }
+            };
+            checkForCondition();
+        });
+    }
       
 //======================================
 // MAIN FUNCTION
@@ -45,7 +45,6 @@ async function main() {
     const HintsHTML = await getHints();         // data from Spelling Bee page
 
     // Settings
-    let ShowChar3 = false;                      // toggle: show 3-character hints
     let ShowBlankCells = false;                 // toggle: show/hide empty data cells           
     let ShowRemaining = false;                  // toggle: show remaining vs found words
     let SubTotalsAtTop = false;                 // toggle: placement of subtotal line
@@ -57,12 +56,9 @@ async function main() {
         MetaStats2: document.getElementById('metastats2'),
         MetaStats3: document.getElementById('metastats3'),
         MetaStats4: document.getElementById('metastats4'),
-        TableHeader: document.getElementById('header'),
         Legend: document.getElementById('legend'),
         Table: document.getElementById('table0'),
-        Table1: document.getElementById('table1'),
-        Char3Container: document.getElementById('char3container'),
-        ShowChar3: document.getElementById('char3'),
+        TableHeader: document.getElementById('header'),
         ShowBlankCells: document.getElementById('hideEmptyCells'),
         ShowRemaining: document.getElementById('showRemaining'),
         SubTotalsAtTop: document.getElementById('subTotalsAtTop'),
@@ -114,7 +110,6 @@ async function main() {
     let ColIndex = [0, 0, 0, 3];
     let TableTotalRows = 0;
     let Cell = [];              // element references for Table
-    let Cell1 = [];             // element refs for Table1
 
     // Metastats
     let WordsTotal = 0;
@@ -123,7 +118,7 @@ async function main() {
     let PangramsFound = 0;
     let TotalPoints = 0;
     let GeniusScore = await getGeniusScore();
-    let Char3Score = 0;
+    const Char3Score = GeniusScore + Math.round((TotalPoints - GeniusScore) / 4);
     
     // Words data
     let LetterList = "";        // needed to find pangrams
@@ -147,14 +142,12 @@ async function main() {
     });
     observeWordList.observe(El.WordList, {childList: true});
 
-    /* ----- Toggle showing 3-character hints ----- */
-    El.ShowChar3.addEventListener('click', ToggleChar3);
-
     /* ----- Toggle hiding blank cells ----- */
     El.ShowBlankCells.addEventListener('click', ToggleHiddenCells);
 
     /* ----- Toggle remaining vs found words ----- */
     El.ShowRemaining.addEventListener('click', ToggleFoundRemaining);
+
 
     /* ----- Toggle placement of subtotal line ----- */
     El.SubTotalsAtTop.addEventListener('click', ToggleSubtotals);
@@ -163,14 +156,14 @@ async function main() {
     El.SaveSettings.addEventListener('click', SaveSettings);
 
     /* ----- Detect Queen Bee page pop-up ----- */
-    //       and hide Bee Hive display
+    /*       and hide Bee Hive display          */
     const observeQBPage = new MutationObserver(() => {
         HideOnQBPopup();
     });
     observeQBPage.observe(El.QueenBeePage, {attributes: true});
 
 //======================================
-// SYSTEM DATA
+// GET SYSTEM DATA
 //======================================
 
     /* ----- Create DOM for Bee Hive HTML ----- */
@@ -203,14 +196,13 @@ async function main() {
             <td id="legend">Σ = <font color="mediumvioletred"><b>TOTAL words</b>
             <font color="black">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp# = <b>FOUND words</b></td>
             </tr></table>
-        <table id="table0"></table><br>
-        <table id="table1" hidden></table>
-        <p id="char3container" class="inputs"><input id="char3" type="checkbox">&nbspHelp! - show 3-letter hints</input></p>
-        <p class="inputs"><input id="hideEmptyCells" type="checkbox">&nbspShow completed rows and columns</input></p>
-        <p class="inputs"><input id="showRemaining" type="checkbox">&nbspShow number of words remaining</input></p>
-        <p class="inputs"><input id="subTotalsAtTop" type="checkbox">&nbspPlace subtotal line above letter tallies</input></p>
-        <p class="inputs"><input id="saveSettings" type="checkbox">&nbspSave settings</input></p>
-        <p class="inputs"><br>Bee Hive Release 1.22</p>
+        <table id="table0">
+        </table>
+        <br><input id="hideEmptyCells" type="checkbox">&nbspShow completed rows and columns</input>
+        <br><input id="showRemaining" type="checkbox">&nbspShow number of words remaining</input>
+        <br><input id="subTotalsAtTop" type="checkbox">&nbspPlace subtotal line above letter tallies</input>
+        <br><input id="saveSettings" type="checkbox">&nbspSave settings</input>
+        <br><br>Bee Hive Release 1.21
         <style>
             #metastats1 {
                 font-family: Arial, Helvetica, sans-serif;
@@ -238,36 +230,21 @@ async function main() {
                 text-align: left;
                 width: 14ch;
             }
-            #header td {
-                font-family: Arial, Helvetica, sans-serif;
-                font-size: 90%;
-            }
             #table0 {
+                margin-left: 3ch;
                 font-family: Arial, Helvetica, sans-serif;
                 font-size: medium;
             }
             #table0 td {
                 height: 1ch;
                 width: 3ch;
-                margin-left: 2ch;
-                margin-right: 2ch;
-                text-align: center;
-                font-family: Arial, Helvetica, sans-serif;
-                font-size: 90%;
-            }
-            #table1 {
                 margin-left: 5ch;
-                font-family: Arial, Helvetica, sans-serif;
-                font-size: medium;
-            }
-            #table1 td {
-                font-family: Arial, Helvetica, sans-serif;
+                margin-right: 5ch;
                 text-align: center;
+                font-family: Arial, Helvetica, sans-serif;
                 font-size: 90%;
-                margin-left: 2ch;
-                margin-right: 2ch;
             }
-            .inputs {
+            #header td {
                 font-family: Arial, Helvetica, sans-serif;
                 font-size: 90%;
             }
@@ -310,7 +287,7 @@ async function main() {
     async function getGeniusScore() {
         [...document.querySelectorAll(".pz-dropdown__menu-item")][1].click();
         let element = await waitForElement('.sb-modal-ranks__list');
-        let score = +element.querySelectorAll('td')[3].innerText.replace(/\D/g, '');        
+        let score = element.querySelectorAll('td')[3].innerText.replace(/\D/g, '');        
         document.querySelector('.sb-modal-close').click();
         return score;
 
@@ -403,8 +380,7 @@ async function main() {
         LetterList = paragraphs[1].textContent.replace(/\s/g, '').toUpperCase();
         temp = paragraphs[2].textContent.split(/[^0-9]+/);
             WordsTotal = +temp[1];
-            TotalPoints = +temp[2];
-            Char3Score = GeniusScore + (+Math.floor((TotalPoints - GeniusScore) / 4));
+            TotalPoints = temp[2];
             PangramsTotal = temp[3];
                 if (temp[4] > 0) PangramsTotal = PangramsTotal + ' (' + temp[4] + ' Perfect)';
 
@@ -456,7 +432,6 @@ async function main() {
         CreateTableData(char1Table, char2Table, header, spacer);
 
         CreateHTMLTable();
-        CreateHTMLTable1();
         FormatCells();
         UpdateList();
         return;
@@ -546,31 +521,6 @@ async function main() {
         return;
     }
     
-    function CreateHTMLTable1() {
-        for (let y = 0; y < 5; y++) {
-            let rowObj = [];
-            let rowEl = document.createElement('tr');
-            for (let x = 0; x < 3; x++) {
-                let cellEl = document.createElement('td');
-                rowObj.push({element: cellEl});
-                rowEl.appendChild(cellEl);
-            }
-            Cell1.push(rowObj);
-            El.Table1.appendChild(rowEl);
-        }
-        El.Char3Container.setAttribute("hidden", '');
-        Cell1[1][0].element.innerHTML = `Hint`;
-        Cell1[1][0].element.style.borderBottom = "1px solid black";
-        Cell1[1][1].element.innerHTML = `&nbsp&nbsp&nbsp`;
-        Cell1[1][2].element.innerHTML = `Length`;
-        Cell1[1][2].element.style.borderBottom = "1px solid black";
-        Cell1[3][0].element.innerHTML = `&nbsp`;
-        Cell1[4][0].element.innerHTML = `&nbsp`;
-        for (let i = 0; i < 3; i++)
-            Cell1[3][i].element.style.borderBottom = "1px solid black";
-        return;
-    }
-    
     function FormatCells() {
         let row;
         TablePtrs.forEach(item => {
@@ -628,10 +578,8 @@ async function main() {
             if (!ProcessedWords.includes(inputList[i])) {
                 ProcessedWords.push(inputList[i]);
                 processList.push(inputList[i]);
-                RemainingWords.splice(RemainingWords.indexOf(inputList[i]), 1);    // update Remaining Word list
             }
         }
-
         // Tally new words
         for (let i = 0; i < processList.length; i++) {     // Tally input words
             Table[Char2Row[(processList[i].slice(0, 2))]][ColIndex[processList[i].length]]++;
@@ -645,23 +593,15 @@ async function main() {
             }
             if (pangram) PangramsFound++;
         }
-        TablePtrs.forEach(item => {                        // update sums
+        TablePtrs.forEach(item => {                         // update sums
             item.sums();
             item.found = Table[item.rowFound][2];
-        });
-
+        });             // summate columns and rows
         DisplayMetaStats();
-        debugger;
-        if (+(document.querySelector(".sb-progress-value").innerText) >= Char3Score)
-            El.Char3Container.removeAttribute("hidden");
-        if (ShowChar3) {
-            Display3Char();
-        } else {
-            DisplayTable();
-        }
+        DisplayTable();
         return;
     }
-
+    
 //======================================
 // DISPLAY FUNCTIONS
 //======================================
@@ -741,49 +681,7 @@ async function main() {
                 Cell[item.rowFound][2].element.innerText = Table[item.rowFound][1] - Table[item.rowFound][2];
             }
         });
-        if (WordsFound === WordsTotal) {
-            El.Legend.innerHTML = 'CONGRATULATIONS, YOUR MAJESTY!';
-            El.Table.setAttribute("hidden", "");
-        }
-        return;
-    }
-
-    function Display3Char() {
-        if (RemainingWords.length > 0) {
-            let ch3 = ``;
-            let len3 = ``;
-            for (let i = 0; i < RemainingWords.length; i++) {
-                ch3 += RemainingWords[i].slice(0, 3) + `<br>`;
-                len3 += RemainingWords[i].length + `<br>`;
-                Cell1[2][0].element.innerHTML = ch3;
-                Cell1[2][2].element.innerHTML = len3;
-            }
-        } else {
-            El.Legend.innerHTML = 'LONG LIVE THE QUEEN!';
-            El.Table1.setAttribute("hidden", "");
-        }
-        return;
-    }
-
-    function ToggleChar3 () {
-        ShowChar3 = !ShowChar3;
-        if (ShowChar3) {
-            El.Table1.removeAttribute("hidden");
-            El.Table.setAttribute("hidden", "");
-            El.Legend.innerHTML = 'REMAINING WORDS';
-            Display3Char();
-        } else {
-            El.Table1.setAttribute("hidden", "");
-            El.Table.removeAttribute("hidden");
-            if (ShowRemaining) {
-                El.Legend.innerHTML = `Σ = <font color="mediumvioletred"><b>TOTAL words</b>
-                <font color="black">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp# = <strong><b>REMAINING words</b></strong>`;
-            } else {
-                El.Legend.innerHTML = `Σ = <font color="mediumvioletred"><b><strong>TOTAL</strong> words</b>
-                <font color="black">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp# = <b>FOUND words</b>`;
-            }
-            DisplayTable();
-        }
+    
         return;
     }
 
@@ -819,23 +717,21 @@ async function main() {
                 }
             }
         });
-        if (KLUDGE && !ShowChar3) DisplayTable();     // DEBUG
+        if (KLUDGE) DisplayTable();     // DEBUG
         return;
     }
 
     function ToggleFoundRemaining () {
         ShowRemaining = !ShowRemaining;
         ShowRemaining ? setCookie("beehiveRemaining=true") : setCookie("beehiveRemaining=false");
-        if (!ShowChar3) {
-            if (ShowRemaining) {
-                El.Legend.innerHTML = `Σ = <font color="mediumvioletred"><b>TOTAL words</b>
-                <font color="black">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp# = <strong><b>REMAINING words</b></strong>`;
-            } else {
-                El.Legend.innerHTML = `Σ = <font color="mediumvioletred"><b><strong>TOTAL</strong> words</b>
-                <font color="black">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp# = <b>FOUND words</b>`;
-            }
+        if (ShowRemaining) {
+            El.Legend.innerHTML = `Σ = <font color="mediumvioletred"><b>TOTAL words</b>
+            <font color="black">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp# = <strong><b>REMAINING words</b></strong>`;
+        } else {
+            El.Legend.innerHTML = `Σ = <font color="mediumvioletred"><b><strong>TOTAL</strong> words</b>
+            <font color="black">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp# = <b>FOUND words</b>`;
         }
-        if (!ShowChar3) DisplayTable ();
+        DisplayTable ();
     return;
     }
 
@@ -906,7 +802,7 @@ async function main() {
         ToggleHiddenCells (KLUDGE);
         KLUDGE = true;
         ToggleHiddenCells (KLUDGE);
-        //  if (!ShowChar3) DisplayTable ();
+        // DisplayTable ();
 
         return;
     }
