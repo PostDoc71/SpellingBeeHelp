@@ -9,22 +9,22 @@
 window.hiveLoaded = true;
 
 /* ----- Do not launch while on Welcome or Queen Bee pages ----- */
-await waitForCondition(
-    document.getElementById('js-hook-pz-moment__welcome'),      // Welcome page
-    document.getElementById('js-hook-pz-moment__congrats'));    // Queen Bee page
+// await waitForCondition(
+//     document.getElementById('js-hook-pz-moment__welcome'),      // Welcome page
+//     document.getElementById('js-hook-pz-moment__congrats'));    // Queen Bee page
 
-function waitForCondition(welcome, queenBee) {
-    return new Promise(resolveElement => {
-        const checkForCondition = () => {           // both frames invisible
-            if (welcome.clientHeight + queenBee.clientHeight === 0) {
-                resolveElement(true);
-            } else {
-                setTimeout(checkForCondition, 10);
-            }
-        };
-        checkForCondition();
-    });
-}
+// function waitForCondition(welcome, queenBee) {
+//     return new Promise(resolveElement => {
+//         const checkForCondition = () => {           // both frames invisible
+//             if (welcome.clientHeight + queenBee.clientHeight === 0) {
+//                 resolveElement(true);
+//             } else {
+//                 setTimeout(checkForCondition, 10);
+//             }
+//         };
+//         checkForCondition();
+//     });
+// }
 
 main();
       
@@ -159,7 +159,7 @@ async function main() {
     /* ----- Toggle placement of subtotal line ----- */
     El.SubTotalsAtTop.addEventListener('click', ToggleSubtotals);
 
-    /* ----- Save settings ----- */
+    /* ----- Toggle saving settings ----- */
     El.SaveSettings.addEventListener('click', SaveSettings);
 
     /* ----- Detect Queen Bee page pop-up ----- */
@@ -306,11 +306,14 @@ async function main() {
         return hints;
     }
 
-    /* ----- Open Rankings pop-up for data ----- */
+    /* ----- Open Rankings pop-up for GeniusScore ----- */
     async function getGeniusScore() {
         [...document.querySelectorAll(".pz-dropdown__menu-item")][1].click();
-        let element = await waitForElement('.sb-modal-ranks__list');
-        let score = +element.querySelectorAll('td')[3].innerText.replace(/\D/g, '');        
+        await waitForElement('.sb-modal-title');
+        const geniusElement =       // menus for logged-in and logged-out
+            document.querySelector('.sb-modal-ranks__list')?.querySelectorAll('td')[3] ||
+            document.querySelector('.sb-modal-list')?.querySelector('li:last-of-type');
+        const score = +geniusElement?.innerText.replace(/\D/g, '');
         document.querySelector('.sb-modal-close').click();
         return score;
 
