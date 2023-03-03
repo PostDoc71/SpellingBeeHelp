@@ -292,7 +292,7 @@ async function main() {
             
             /* Modal Content */
             .bh-modal-content {
-                background-color: yellow;
+                background-color: rgb(255, 221, 0);
                 margin-right: 75px;
                 right: 40;
                 padding: 7px;
