@@ -1,8 +1,8 @@
 (() => {
     'use strict';
-    
-//======================================
-// LOAD PROGRAM AFTER CONDITIONS MET
+
+    //======================================
+// LOAD PROGRAM IF CONDITIONS MET
 //======================================
 
 /* ----- Stop if under maintenance ----- */
@@ -13,7 +13,7 @@ if (oops) {
 
 /* ----- Do not allow to launch more than once ----- */
 } else if (window.hiveLoaded) {
-    customAlert ('The Bee Hive program has already been loaded.  Please buzz on by (Apian language for continue).',
+    customAlert ('The Bee Hive program has already been loaded.  Please buzz on by (Apian-speak for continue).',
     'PLEASE NOTE', 'Continue');
 
 /* ----- Launch only from NYT Spelling Bee website ----- */
@@ -33,7 +33,7 @@ function customAlert(text, title, button) {
     mObj.style.height = d.documentElement.scrollHeight + "px";
     mObj.innerHTML = `    <style>
     #modalContainer {
-        background-color:rgba(0, 0, 0, 0.2);
+        background-color:rgba(0, 0, 0, 0.15);
         position:absolute;
         width:100%;
         height:100%;

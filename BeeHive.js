@@ -1,30 +1,23 @@
 (async () => {            // OUTER SHELL
 'use strict';
-    
-//======================================
-// LOAD PROGRAM AFTER CONDITIONS MET
-//======================================
-
-/* ----- Do not allow to launch more than once ----- */
-window.hiveLoaded = true;
 
 /* ----- Do not launch while on Welcome or Queen Bee pages ----- */
-// await waitForCondition(
-//     document.getElementById('js-hook-pz-moment__welcome'),      // Welcome page
-//     document.getElementById('js-hook-pz-moment__congrats'));    // Queen Bee page
+await waitForCondition(
+    document.getElementById('js-hook-pz-moment__welcome'),      // Welcome page
+    document.getElementById('js-hook-pz-moment__congrats'));    // Queen Bee page
 
-// function waitForCondition(welcome, queenBee) {
-//     return new Promise(resolveElement => {
-//         const checkForCondition = () => {           // both frames invisible
-//             if (welcome.clientHeight + queenBee.clientHeight === 0) {
-//                 resolveElement(true);
-//             } else {
-//                 setTimeout(checkForCondition, 10);
-//             }
-//         };
-//         checkForCondition();
-//     });
-// }
+function waitForCondition(welcome, queenBee) {
+    return new Promise(resolveElement => {
+        const checkForCondition = () => {           // both frames invisible
+            if (welcome.clientHeight + queenBee.clientHeight === 0) {
+                resolveElement(true);
+            } else {
+                setTimeout(checkForCondition, 10);
+            }
+        };
+        checkForCondition();
+    });
+}
 
 main();
       
@@ -39,6 +32,7 @@ async function main() {
     //--------------------------------------
 
     /* ----- System data ----- */
+    window.hiveLoaded = true;                   // Do not allow to launch more than once
     const devicePhone = detectPhoneDevice();    // DEBUG: either should work, but .orientation will lose support
     // const devicePhone = (window.orientation === 'undefined') ? false : true;
     const hintDiv = setUpHintDiv();             // initialize DOM
@@ -210,7 +204,14 @@ async function main() {
         <p class="inputs"><input id="showRemaining" type="checkbox">&nbspShow number of words remaining</input></p>
         <p class="inputs"><input id="subTotalsAtTop" type="checkbox">&nbspPlace subtotal line above letter tallies</input></p>
         <p class="inputs"><input id="saveSettings" type="checkbox">&nbspSave settings</input></p>
-        <p class="inputs"><br>Bee Hive Release 1.22</p>
+        <p class="inputs" style="margin-top: 3px"><button id="bh-defineBtn">Definition</button></p>
+        <p class="inputs"><br>Bee Hive Release 1.23</p>
+        <div id="bh-myModal" class="bh-modal">
+            <div class="bh-modal-content"> 
+                &nbsp;Define:<span class="bh-close">&times;</span>
+                <div id="bh-modal-list" style="border-top-style: 1px solid black;"></div>
+            </div>
+        </div>
         <style>
             #metastats1 {
                 font-family: Arial, Helvetica, sans-serif;
@@ -271,9 +272,60 @@ async function main() {
                 font-family: Arial, Helvetica, sans-serif;
                 font-size: 90%;
             }
-            </style>
+ 
+            /* DICTIONARY Modal background */
+            .bh-modal {
+                display: none; /* Hidden by default */
+                position: fixed; /* Stay in place */
+                z-index: 99; /* Sit on top */
+                padding-top: 60px; /* Location of the box */
+                padding-right: 40px;
+                left: 0;
+                top: 0;
+                width: 100%; /* Full width */
+                height: 100%; /* Full height */
+                overflow: auto; /* Enable scroll if needed */
+                background-color: rgb(0,0,0); /* Fallback color */
+                background-color: rgba(0,0,0,0.15); /* Black w/ opacity */
+                font-size: 90%;
+            }
+            
+            /* Modal Content */
+            .bh-modal-content {
+                background-color: yellow;
+                margin-right: 75px;
+                right: 40;
+                padding: 7px;
+                border: 2px solid #888;
+                width: 16ch;
+                float: right;
+            }
+            
+            /* Modal list items */
+            .bh-modal-item:hover,
+            .bh-modal-item:focus {
+                background-color: beige;
+                text-decoration: none;
+                cursor: pointer;
+            }
+        
+            /* The Close Button */
+            .bh-close {
+                color: #aaaaaa;
+                float: right;
+                font-size: 28px;
+                font-weight: bold;
+            }
+            
+            .bh-close:hover,
+            .bh-close:focus {
+                color: #000;
+                text-decoration: none;
+                cursor: pointer;
+            }
+        </style>
         `;
-        return hintDiv;
+    return hintDiv;
     }
 
     /* ----- Detect device ----- */
@@ -760,7 +812,11 @@ async function main() {
                 Cell1[2][2].element.innerHTML = len3;
             }
         } else {
-            El.Legend.innerHTML = 'LONG LIVE THE QUEEN!';
+            if ((+gameData.today.printDate.at(-1) % 3) === 1) {
+                El.Legend.innerHTML = 'LON LIV THE QUE!';
+            } else {
+                El.Legend.innerHTML = 'LONG LIVE THE QUEEN!';
+            }
             El.Table1.setAttribute("hidden", "");
         }
         return;
@@ -917,6 +973,50 @@ async function main() {
             hintDiv.style.visibility = 'visible';
         }
         return;
+    }
+
+//======================================
+// DICTIONARY FUNCTIONS
+//======================================
+
+    // Get the modal
+    let bhmodal = ``;
+
+    // Get the button that opens the modal
+    const btn = document.getElementById("bh-defineBtn");
+
+    // Get the <span> element that closes the modal
+    const span = document.getElementsByClassName("bh-close")[0];
+
+    // Modal innerHTML
+    const bhmodalList = document.getElementById("bh-modal-list");
+
+    // When the user clicks DEFINITION button, open the modal 
+    btn.onclick = function() {
+        ProcessedWords.sort();
+        bhmodal = document.getElementById("bh-myModal");
+        bhmodal.style.display = "block";
+        let temp = `<dl>`;
+        for (let i = 0; i < ProcessedWords.length; i++)
+            temp += `<dt class="bh-modal-item" onclick='window.open("https://www.merriam-webster.com/dictionary/` 
+            + ProcessedWords[i] + `", "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=50,left=700,width=750,height=600")'>`
+                + `&nbsp;` + ProcessedWords[i] + `</dt>`;
+        // temp += `<dt class="bh-modal-item" onclick="callDictionary('` + ProcessedWords[i] + `')">` + `&nbsp;` + ProcessedWords[i] + `</dt>`;
+        temp += `</dl>`;
+        bhmodalList.innerHTML = temp;
+        return;
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+        bhmodal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == bhmodal) {
+            bhmodal.style.display = "none";
+        }
     }
 
 }       // end of main function

@@ -1,7 +1,18 @@
 {
     "name": "Bee Hive",
-    "version": "1.2.1",
+    "version": "1.2.2",
     "description": "NYT Spelling Bee automated hints tally",
     "manifest_version": 3,
     "author": "Karl Chun",
+    "content_scripts": [{
+        "matches": ["https://www.nytimes.com/puzzles/spelling-bee"],
+        "js": ["BeeHive.js"],
+        "runAt" : "document_end",
+        "all_frames": true,
+        "permissions": [
+          "activeTab",
+          "scripting"
+        ]    
+    }]
+    
 }
