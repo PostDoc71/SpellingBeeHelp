@@ -1,6 +1,8 @@
 (async () => {            // OUTER SHELL
 'use strict';
 
+window.hiveLoaded = true;                   // Do not allow to launch more than once
+
 /* ----- Do not launch while on Welcome or Queen Bee pages ----- */
 await waitForCondition(
     document.getElementById('js-hook-pz-moment__welcome'),      // Welcome page
@@ -32,7 +34,6 @@ async function main() {
     //--------------------------------------
 
     /* ----- System data ----- */
-    window.hiveLoaded = true;                   // Do not allow to launch more than once
     const devicePhone = detectPhoneDevice();    // DEBUG: either should work, but .orientation will lose support
     // const devicePhone = (window.orientation === 'undefined') ? false : true;
     const hintDiv = setUpHintDiv();             // initialize DOM
