@@ -209,12 +209,6 @@ async function main() {
         <p class="inputs"><br>Bee Hive Release 1.23<br><br><br><br></p>
         <div align='right' class="bh-counter">
             <a href='https://www.free-website-hit-counter.com'>
-            <img src='https://www.free-website-hit-counter.com/c.php?d=5&id=146729&s=55' border='0' alt='Free Website Hit Counter'>
-            </a><br / >
-            <small><a href='https://www.free-website-hit-counter.com' title="Free Website Hit Counter">Free website hit counter</a></small>
-        </div>
-        <div align='right' class="bh-counter">
-            <a href='https://www.free-website-hit-counter.com'>
                 <img src='https://www.free-website-hit-counter.com/c.php?d=5&id=146730&s=36' border='0' alt='Free Website Hit Counter'>
             </a><br / >
             <small><a href='https://www.free-website-hit-counter.com' title="Free Website Hit Counter">Free website hit counter</a></small>
