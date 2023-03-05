@@ -1,7 +1,7 @@
 (() => {
     'use strict';
 
-    //======================================
+//======================================
 // LOAD PROGRAM IF CONDITIONS MET
 //======================================
 
@@ -113,5 +113,26 @@ function customAlert(text, title, button) {
     function removeCustomAlert() {
         document.getElementsByTagName("body")[0].removeChild(document.getElementById("modalContainer"));
     }
- }
+}
+
+//======================================
+// HIT COUNTER at bottom right corner
+//======================================
+
+const counterObj = document.getElementsByTagName("body")[0].appendChild(document.createElement("div"));
+counterObj.innerHTML = `<div align='right' class="bh-counter">
+<a href='https://www.free-website-hit-counter.com'>
+<img src='https://www.free-website-hit-counter.com/c.php?d=5&id=146729&s=55' border='0' alt='Free Website Hit Counter'>
+</a><br / >
+<small><a href='https://www.free-website-hit-counter.com' title="Free Website Hit Counter">Free website hit counter</a></small>
+</div>
+<style>
+.bh-counter {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 80%;
+    opacity: calc(15%);
+}
+</style>
+`;
+
 })();
