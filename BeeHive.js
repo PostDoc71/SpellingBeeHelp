@@ -44,7 +44,7 @@ async function main() {
     let ShowBlankCells = false;                 // toggle: show/hide empty data cells           
     let ShowRemaining = false;                  // toggle: show remaining vs found words
     let SubTotalsAtTop = false;                 // toggle: placement of subtotal line
-    let SaveSetting = false;                    // toggle: save above in cookie
+    let SaveSetting = false;                    // toggle: save above in cookies
 
     // Elements
     const El = {
@@ -206,8 +206,8 @@ async function main() {
         <p class="inputs"><input id="subTotalsAtTop" type="checkbox">&nbspPlace subtotal line above letter tallies</input></p>
         <p class="inputs"><input id="saveSettings" type="checkbox">&nbspSave settings</input></p>
         <p class="inputs" style="margin-top: 3px"><button id="bh-defineBtn">Definition</button></p>
-        <p class="inputs"><br>Bee Hive Release 1.23<br><br><br><br></p>
-        <div align='right' class="bh-counter">
+        <p class="inputs" id="bh-button"><br>Bee Hive Release 1.23<br><br></p>
+        <div align='center' id="bh-counter" hidden>
             <a href='https://www.free-website-hit-counter.com'>
                 <img src='https://www.free-website-hit-counter.com/c.php?d=5&id=146730&s=36' border='0' alt='Free Website Hit Counter'>
             </a><br / >
@@ -280,7 +280,7 @@ async function main() {
                 font-family: Arial, Helvetica, sans-serif;
                 font-size: 90%;
             }
-            .bh-counter {
+            #bh-counter {
                 font-family: Arial, Helvetica, sans-serif;
                 font-size: 80%;
                 opacity: calc(30%);
@@ -445,7 +445,7 @@ async function main() {
     }
 
     function setCookie (name) {
-        document.cookie = name + "; max-age=700000";
+        document.cookie = name + "; max-age=700000";    // expires in ~8 days
         return;
     }
 
@@ -1016,7 +1016,6 @@ async function main() {
             temp += `<dt class="bh-modal-item" onclick='window.open("https://www.merriam-webster.com/dictionary/` 
             + ProcessedWords[i] + `", "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=50,left=700,width=750,height=600")'>`
                 + `&nbsp;` + ProcessedWords[i] + `</dt>`;
-        // temp += `<dt class="bh-modal-item" onclick="callDictionary('` + ProcessedWords[i] + `')">` + `&nbsp;` + ProcessedWords[i] + `</dt>`;
         temp += `</dl>`;
         bhmodalList.innerHTML = temp;
         return;
@@ -1032,6 +1031,19 @@ async function main() {
         if (event.target == bhmodal) {
             bhmodal.style.display = "none";
         }
+    }
+
+//======================================
+// COUNTER FUNCTIONS
+//======================================
+
+    let show = false;
+    const counterEl = document.getElementById("bh-counter");
+    document.getElementById("bh-button").onclick = function () {
+        show = !show;
+        show ? counterEl.removeAttribute("hidden") 
+            : counterEl.setAttribute("hidden", "");
+        return;
     }
 
 }       // end of main function
