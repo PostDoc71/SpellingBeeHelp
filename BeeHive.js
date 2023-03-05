@@ -207,11 +207,17 @@ async function main() {
         <p class="inputs"><input id="saveSettings" type="checkbox">&nbspSave settings</input></p>
         <p class="inputs" style="margin-top: 3px"><button id="bh-defineBtn">Definition</button></p>
         <p class="inputs"><br>Bee Hive Release 1.23<br><br><br><br></p>
-        <div align='center' class="bh-counter">
+        <div align='right' class="bh-counter">
             <a href='https://www.free-website-hit-counter.com'>
             <img src='https://www.free-website-hit-counter.com/c.php?d=5&id=146729&s=55' border='0' alt='Free Website Hit Counter'>
-            </a><br / ><small><a href='https://www.free-website-hit-counter.com' title="Free Website Hit Counter">Free website hit counter</a>
-            </small>
+            </a><br / >
+            <small><a href='https://www.free-website-hit-counter.com' title="Free Website Hit Counter">Free website hit counter</a></small>
+        </div>
+        <div align='right' class="bh-counter">
+            <a href='https://www.free-website-hit-counter.com'>
+                <img src='https://www.free-website-hit-counter.com/c.php?d=5&id=146730&s=36' border='0' alt='Free Website Hit Counter'>
+            </a><br / >
+            <small><a href='https://www.free-website-hit-counter.com' title="Free Website Hit Counter">Free website hit counter</a></small>
         </div>
         <div id="bh-myModal" class="bh-modal">
             <div class="bh-modal-content"> 
@@ -282,7 +288,8 @@ async function main() {
             }
             .bh-counter {
                 font-family: Arial, Helvetica, sans-serif;
-                font-size: 75%;
+                font-size: 80%;
+                opacity: calc(30%);
             }
 
             /* DICTIONARY Modal background */
