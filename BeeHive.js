@@ -206,12 +206,19 @@ async function main() {
         <p class="inputs"><input id="subTotalsAtTop" type="checkbox">&nbspPlace subtotal line above letter tallies</input></p>
         <p class="inputs"><input id="saveSettings" type="checkbox">&nbspSave settings</input></p>
         <p class="inputs" style="margin-top: 3px"><button id="bh-defineBtn">Definition</button></p>
-        <p class="inputs"><br>Bee Hive Release 1.23</p>
+        <p class="inputs"><br>Bee Hive Release 1.23<br><br><br><br></p>
+        <div align='center' class="bh-counter">
+            <a href='https://www.free-website-hit-counter.com'>
+            <img src='https://www.free-website-hit-counter.com/c.php?d=5&id=146729&s=55' border='0' alt='Free Website Hit Counter'>
+            </a><br / ><small><a href='https://www.free-website-hit-counter.com' title="Free Website Hit Counter">Free website hit counter</a>
+            </small>
+        </div>
         <div id="bh-myModal" class="bh-modal">
             <div class="bh-modal-content"> 
                 &nbsp;Define:<span class="bh-close">&times;</span>
-                <div id="bh-modal-list" style="border-top-style: 1px solid black;"></div>
+                <div id="bh-modal-list" style="border-top-style: 1px solid black;">
             </div>
+        </div>
         </div>
         <style>
             #metastats1 {
@@ -273,7 +280,11 @@ async function main() {
                 font-family: Arial, Helvetica, sans-serif;
                 font-size: 90%;
             }
- 
+            .bh-counter {
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: 75%;
+            }
+
             /* DICTIONARY Modal background */
             .bh-modal {
                 display: none; /* Hidden by default */
@@ -318,6 +329,8 @@ async function main() {
                 font-weight: bold;
             }
             
+            #bh-defineBtn:hover,
+            #bh-defineBtn:focus,
             .bh-close:hover,
             .bh-close:focus {
                 color: #000;
