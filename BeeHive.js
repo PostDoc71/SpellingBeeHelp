@@ -62,6 +62,7 @@ async function main() {
         ShowRemaining: document.getElementById('showRemaining'),
         SubTotalsAtTop: document.getElementById('subTotalsAtTop'),
         SaveSettings: document.getElementById('saveSettings'),
+        bhShare: document.getElementById('bh-share'),
         WordList: document.querySelector('.sb-wordlist-items-pag'),
         WelcomePage: document.querySelector('.pz-moment__button.primary'),
         QueenBeePage: document.getElementById('js-hook-pz-moment__congrats'),
@@ -157,6 +158,13 @@ async function main() {
     /* ----- Toggle saving settings ----- */
     El.SaveSettings.addEventListener('click', SaveSettings);
 
+    /* ----- Share this program ----- */
+    El.bhShare.onclick = function() {
+        window.open("https://postdoc71.github.io/SpellingBeeHelp/index.html",
+        "_blank", "top=50,left=100,width=750,height=650,scrollbars=yes,resizable=yes,toolbar=yes");
+        return;
+    }
+
     /* ----- Detect Queen Bee page pop-up ----- */
     //       and hide Bee Hive display
     const observeQBPage = new MutationObserver(() => {
@@ -205,7 +213,8 @@ async function main() {
         <p class="inputs"><input id="showRemaining" type="checkbox">&nbspShow number of words remaining</input></p>
         <p class="inputs"><input id="subTotalsAtTop" type="checkbox">&nbspPlace subtotal line above letter tallies</input></p>
         <p class="inputs"><input id="saveSettings" type="checkbox">&nbspSave settings</input></p>
-        <p class="inputs" style="margin-top: 3px"><button id="bh-defineBtn">Definition</button></p>
+        <p class="inputs" style="margin-top: 3px"><button id="bh-defineBtn">Definitions</button></p>
+        <p class="inputs" style="margin-top: 3px"><button id="bh-share">Share this program</button></p>
         <p class="inputs" id="bh-button"><br>Bee Hive Release 1.23<br><br></p>
         <div align='center' id="bh-counter" hidden>
             <a href='https://www.free-website-hit-counter.com'>
@@ -991,20 +1000,13 @@ async function main() {
     }
 
 //======================================
-// DICTIONARY FUNCTIONS
+// DICTIONARY FUNCTION/MODULE
 //======================================
 
-    // Get the modal
-    let bhmodal = ``;
-
-    // Get the button that opens the modal
-    const btn = document.getElementById("bh-defineBtn");
-
-    // Get the <span> element that closes the modal
-    const span = document.getElementsByClassName("bh-close")[0];
-
-    // Modal innerHTML
-    const bhmodalList = document.getElementById("bh-modal-list");
+    let bhmodal = ``;                                               // Modal container
+    const btn = document.getElementById("bh-defineBtn");            // Button to open the modal
+    const span = document.getElementsByClassName("bh-close")[0];    // Close modal
+    const bhmodalList = document.getElementById("bh-modal-list");   // Modal innerHTML
 
     // When the user clicks DEFINITION button, open the modal 
     btn.onclick = function() {
@@ -1034,7 +1036,7 @@ async function main() {
     }
 
 //======================================
-// COUNTER FUNCTIONS
+// COUNTER FUNCTION
 //======================================
 
     let show = false;
@@ -1042,7 +1044,7 @@ async function main() {
     document.getElementById("bh-button").onclick = function () {
         show = !show;
         show ? counterEl.removeAttribute("hidden") 
-            : counterEl.setAttribute("hidden", "");
+             : counterEl.setAttribute("hidden", "");
         return;
     }
 

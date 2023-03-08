@@ -11,38 +11,52 @@
 </head>
 
 <body>
-<H3>BEE HIVE</H3>
-<p>Bee Hive inserts itself onto the NYT Spelling Bee web page, then tallies your <br>
-found words onto the Spelling Bee HINTS grid.  This only works on computers, not<br>
-phones.  Stay tuned; I may make a phone version later.<br><br>
-To use this program, you must start it from a bookmark.  You only need to do the<br>
-bookmark installation in step 1 once.  Afterwards, just click on your Bee Hive<br>
-bookmark while on the Spelling Bee web page.</p>
-<ol>
-    
-	<li>Create a new bookmark.<br>
-        <ul><li>
-            Drag and drop this link onto your Bookmarks bar:&nbsp;
-            <a href="javascript:fetch('https://raw.githubusercontent.com/PostDoc71/SpellingBeeHelp/main/SpellingBoss.js').then(r => r.text()).then(t => eval(t))">Bee Hive</a>
-        </li></ul>
-    </li><br>
-    <li>To use:<br>
-        <ul>
-            <li>Launch <button title="Click to start Spelling Bee" onclick="document.location='https://www.nytimes.com/puzzles/spelling-bee'">Spelling Bee</button></li>
-            <li>Click the Bee Hive bookmark on your Bookmarks bar.</li>
-        </ul>
-    </li>
-</ol>
+    <div id="container">
+        <H3>BEE HIVE</H3>
+        <p>Bee Hive inserts itself onto the NYT Spelling Bee web page, then tallies your <br>
+        found words onto the Spelling Bee HINTS grid.  This only works on computers, not<br>
+        phones.  Stay tuned; I may make a phone version later.<br><br>
+        To use this program, you must start it from a bookmark.  You only need to do the<br>
+        bookmark installation in step 1 once.  Afterwards, just click on your Bee Hive<br>
+        bookmark while on the Spelling Bee web page.</p>
+        <ol>
+            
+            <li>Create a new bookmark.<br>
+                <ul><li>
+                    Drag and drop this link onto your Bookmarks bar:&nbsp;
+                    <a href="javascript:fetch('https://raw.githubusercontent.com/PostDoc71/SpellingBeeHelp/main/SpellingBoss.js').then(r => r.text()).then(t => eval(t))" 
+                        title="Drag and drop this">Bee Hive</a>
+                </li></ul>
+            </li><br>
+            <li>To use:<br>
+                <ul>
+                    <li>Launch <button title="Click to start Spelling Bee" onclick="document.location='https://www.nytimes.com/puzzles/spelling-bee'">Spelling Bee</button></li>
+                    <li>Click the Bee Hive bookmark on your Bookmarks bar.</li>
+                </ul>
+            </li><br>
+            <li>To share this program with others:<br>
+                <ul>
+                    <li>Copy this website's URL, then share it.
+                        <button id="copy-button" title="Click to copy URL">Copy URL</buttan></li>
+                </ul>
+            </li><br>
+        </ol>
 
-<p>This should ease the task of tallying your entries!</p>
+        <p>This should ease the task of tallying your entries!</p>
 
-<p>Happy Hiving!<br>postDoc71 (ie retired pediatrician as of age 71)</p>
-  
+        <p>Happy Hiving!<br>postDoc71 (ie retired pediatrician as of age 71)</p>
+    </div>
 <script>
+    document.getElementById("copy-button").onclick = function() {
+      navigator.clipboard.writeText("https://postdoc71.github.io/SpellingBeeHelp/index.html");
+      alert(`URL text copied to clipboard:\n` + "https://postdoc71.github.io/SpellingBeeHelp/index.html");
+      return;
+    }
+    
     function copyURL(input) {
       var copyText = document.getElementById(input);
       copyText.select();
-    //   copyText.setSelectionRange(0, 99999); // For mobile devices
+      copyText.setSelectionRange(0, 99999); // For mobile devices
       navigator.clipboard.writeText(copyText.value);
       alert(`URL text copied:\n` + copyText.value);
       return;
@@ -53,6 +67,10 @@ bookmark while on the Spelling Bee web page.</p>
     html * {
         font-family: Arial, Helvetica, sans-serif;
         font-size: medium;
+    }
+    #container {
+        margin-left: 40px;
+        margin-top: 10px;
     }
 </style>
 
