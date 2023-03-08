@@ -7,7 +7,6 @@ To use this program, you must start it from a bookmarklet.  You only need to do 
 bookmarklet installation in step 1 once.  Afterwards, just click on your bookmarklet<br>
 while on the Spelling Bee web page.
 
-a 
 1.  From Bookmark manager, create a new boookmark.	(For a simplified process, go to<br>
 	https://postdoc71.github.io/SpellingBeeHelp/index.html)
 	- Copy the block of text below:
