@@ -1,5 +1,6 @@
-(async () => {            // OUTER SHELL
 'use strict';
+
+(async () => {            // OUTER SHELL
 
 window.hiveLoaded = true;                   // Do not allow to launch more than once
 
@@ -1015,15 +1016,15 @@ async function main() {
         bhmodal.style.display = "block";
         let temp = `<dl>`;
         for (let i = 0; i < ProcessedWords.length; i++)
-            temp += `<dt class="bh-modal-item" onclick='window.open("https://www.merriam-webster.com/dictionary/` 
-            + ProcessedWords[i] + `", "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=50,left=700,width=750,height=600")'>`
-                + `&nbsp;` + ProcessedWords[i] + `</dt>`;
+        temp += `<dt class="bh-modal-item" onclick='window.open("https://www.merriam-webster.com/dictionary/` 
+            + ProcessedWords[i] + `", "dictWin", "toolbar=yes,scrollbars=yes,resizable=yes,top=50,left=700,width=750,height=600")'>`
+            + `&nbsp;` + ProcessedWords[i] + `</dt>`;
         temp += `</dl>`;
         bhmodalList.innerHTML = temp;
-        return;
+    return;
     }
 
-    // When the user clicks on <span> (x), close the modal
+// When the user clicks on <span> (x), close the modal
     span.onclick = function() {
         bhmodal.style.display = "none";
     }
@@ -1036,7 +1037,7 @@ async function main() {
     }
 
 //======================================
-// COUNTER FUNCTION
+// SHOW  COUNTER FUNCTION
 //======================================
 
     let show = false;

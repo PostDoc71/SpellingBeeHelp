@@ -1,5 +1,5 @@
 (() => {
-    'use strict';
+'use strict';
 
 //======================================
 // LOAD PROGRAM IF CONDITIONS MET
