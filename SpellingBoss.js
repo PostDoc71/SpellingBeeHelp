@@ -6,10 +6,10 @@
 //======================================
 
 /* ----- Stop if under maintenance ----- */
-const oops = false;
-// const oops = true;
+// const oops = false;
+const oops = true;
 if (oops) {
-    customAlert('Bee Hive temporarily out of order.  Undergoing maintenance.', 'OOPS', 'Continue')
+    customAlert('Bee Hive temporarily out of order.  Back within an hour.', 'OOPS', 'Continue')
 
 /* ----- Do not allow to launch more than once ----- */
 } else if (window.hiveLoaded) {
