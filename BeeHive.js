@@ -162,7 +162,7 @@ async function main() {
     /* ----- Share this program ----- */
     El.bhShare.onclick = function() {
         window.open("https://postdoc71.github.io/SpellingBeeHelp/index.html",
-        "_blank", "top=50,left=100,width=750,height=650,scrollbars=yes,resizable=yes,toolbar=yes");
+        "bhWin", "top=50,left=100,width=750,height=650,scrollbars=yes,resizable=yes,toolbar=yes");
         return;
     }
 
@@ -1008,6 +1008,7 @@ async function main() {
     const btn = document.getElementById("bh-defineBtn");            // Button to open the modal
     const span = document.getElementsByClassName("bh-close")[0];    // Close modal
     const bhmodalList = document.getElementById("bh-modal-list");   // Modal innerHTML
+    let bhwin;
 
     // When the user clicks DEFINITION button, open the modal 
     btn.onclick = function() {
@@ -1017,7 +1018,7 @@ async function main() {
         let temp = `<dl>`;
         for (let i = 0; i < ProcessedWords.length; i++)
         temp += `<dt class="bh-modal-item" onclick='window.open("https://www.merriam-webster.com/dictionary/` 
-            + ProcessedWords[i] + `", "dictWin", "toolbar=yes,scrollbars=yes,resizable=yes,top=50,left=700,width=750,height=600")'>`
+            + ProcessedWords[i] + `", "bhWin", "toolbar=yes,scrollbars=yes,resizable=yes,top=50,left=700,width=750,height=600")'>`
             + `&nbsp;` + ProcessedWords[i] + `</dt>`;
         temp += `</dl>`;
         bhmodalList.innerHTML = temp;
@@ -1027,12 +1028,16 @@ async function main() {
 // When the user clicks on <span> (x), close the modal
     span.onclick = function() {
         bhmodal.style.display = "none";
+        bhwin = window.open("", "bhWin");
+        bhwin.close();
     }
 
     // When the user clicks anywhere outside of the modal, close it
     window.onclick = function(event) {
         if (event.target == bhmodal) {
             bhmodal.style.display = "none";
+            bhwin = window.open("", "bhWin");
+            bhwin.close();
         }
     }
 
