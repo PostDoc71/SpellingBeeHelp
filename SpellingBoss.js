@@ -9,7 +9,7 @@
 const oops = false;
 // const oops = true;
 if (oops) {
-    customAlert('Bee Hive temporarily out of order.  Back within an hour.', 'OOPS', 'Continue')
+    customAlert('Bee Hive temporarily out of order.  Undergoing maintenance.', 'OOPS', 'Continue')
 
 /* ----- Do not allow to launch more than once ----- */
 } else if (window.hiveLoaded) {
@@ -18,6 +18,22 @@ if (oops) {
 
 /* ----- Launch only from NYT Spelling Bee website ----- */
 } else if (document.URL === 'https://www.nytimes.com/puzzles/spelling-bee') {
+    // HIT COUNTER at bottom right corner
+    const counterObj = document.getElementsByTagName("body")[0].appendChild(document.createElement("div"));
+        counterObj.innerHTML = `<div align='right' class="bh-counter">
+        <a href='https://www.free-website-hit-counter.com'>
+        <img src='https://www.free-website-hit-counter.com/c.php?d=5&id=146729&s=55' border='0' alt='Free Website Hit Counter'>
+        </a><br / >
+        <small><a href='https://www.free-website-hit-counter.com' title="Free Website Hit Counter">Free website hit counter</a></small>
+        </div>
+        <style>
+        .bh-counter {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 80%;
+            opacity: calc(15%);
+        }
+        </style>
+        `;
     fetch('https://raw.githubusercontent.com/PostDoc71/SpellingBeeHelp/main/BeeHive.js').then(r => r.text()).then(t => eval(t))
 } else {
     customAlert('This bookmarklet can only be launched from the NYT Spelling Bee main page.',
@@ -115,24 +131,5 @@ function customAlert(text, title, button) {
     }
 }
 
-//======================================
-// HIT COUNTER at bottom right corner
-//======================================
-
-const counterObj = document.getElementsByTagName("body")[0].appendChild(document.createElement("div"));
-counterObj.innerHTML = `<div align='right' class="bh-counter">
-<a href='https://www.free-website-hit-counter.com'>
-<img src='https://www.free-website-hit-counter.com/c.php?d=5&id=146729&s=55' border='0' alt='Free Website Hit Counter'>
-</a><br / >
-<small><a href='https://www.free-website-hit-counter.com' title="Free Website Hit Counter">Free website hit counter</a></small>
-</div>
-<style>
-.bh-counter {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 80%;
-    opacity: calc(15%);
-}
-</style>
-`;
 
 })();
