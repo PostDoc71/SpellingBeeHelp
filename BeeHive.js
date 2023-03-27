@@ -45,7 +45,6 @@ async function main() {
     let ShowBlankCells = false;                 // toggle: show/hide empty data cells           
     let ShowRemaining = false;                  // toggle: show remaining vs found words
     let SubTotalsAtTop = false;                 // toggle: placement of subtotal line
-    let HideHintsTable = false;                 // toggle: make hints invisible
     let SaveSetting = false;                    // toggle: save above in cookies
 
     // Elements
@@ -63,7 +62,6 @@ async function main() {
         ShowBlankCells: document.getElementById('hideEmptyCells'),
         ShowRemaining: document.getElementById('showRemaining'),
         SubTotalsAtTop: document.getElementById('subTotalsAtTop'),
-        HideHints: document.getElementById('bh-hideHints'),
         SaveSettings: document.getElementById('saveSettings'),
         bhShare: document.getElementById('bh-share'),
         WordList: document.querySelector('.sb-wordlist-items-pag'),
@@ -158,9 +156,6 @@ async function main() {
     /* ----- Toggle placement of subtotal line ----- */
     El.SubTotalsAtTop.addEventListener('click', ToggleSubtotals);
 
-    /* ----- Toggle hiding hints ----- */
-    El.HideHints.addEventListener('click', ToggleHints);
-
     /* ----- Toggle saving settings ----- */
     El.SaveSettings.addEventListener('click', SaveSettings);
 
@@ -214,15 +209,14 @@ async function main() {
             </tr></table>
         <table id="table0"></table><br>
         <table id="table1" hidden></table>
-        <p id="char3container" class="inputs"><input id="char3" class="bh-hover" type="checkbox">&nbspHelp! - show 3-letter hints</input></p>
-        <p class="inputs"><input id="hideEmptyCells" class="bh-hover" type="checkbox">&nbspShow completed rows and columns</input></p>
-        <p class="inputs"><input id="showRemaining" class="bh-hover" type="checkbox">&nbspShow number of words remaining</input></p>
-        <p class="inputs"><input id="subTotalsAtTop" class="bh-hover" type="checkbox">&nbspPlace subtotal line above letter tallies</input></p>
-        <p class="inputs"><input id="bh-hideHints" class="bh-hover" type="checkbox">&nbspHide hints</input></p>
-        <p class="inputs"><input id="saveSettings" class="bh-hover" type="checkbox">&nbspSave settings</input></p>
-        <p class="inputs" style="margin-top: 3px"><button id="bh-defineBtn" class="bh-hover">Definitions</button></p>
-        <p class="inputs" style="margin-top: 3px"><button id="bh-share" class="bh-hover">Share this program</button></p>
-        <p class="inputs" id="bh-button"><br>Bee Hive Release 1.24<br><br></p>
+        <p id="char3container" class="inputs"><input id="char3" type="checkbox">&nbspHelp! - show 3-letter hints</input></p>
+        <p class="inputs"><input id="hideEmptyCells" type="checkbox">&nbspShow completed rows and columns</input></p>
+        <p class="inputs"><input id="showRemaining" type="checkbox">&nbspShow number of words remaining</input></p>
+        <p class="inputs"><input id="subTotalsAtTop" type="checkbox">&nbspPlace subtotal line above letter tallies</input></p>
+        <p class="inputs"><input id="saveSettings" type="checkbox">&nbspSave settings</input></p>
+        <p class="inputs" style="margin-top: 3px"><button id="bh-defineBtn">Definitions</button></p>
+        <p class="inputs" style="margin-top: 3px"><button id="bh-share">Share this program</button></p>
+        <p class="inputs" id="bh-button"><br>Bee Hive Release 1.23<br><br></p>
         <div align='center' id="bh-counter" hidden>
             <a href='https://www.free-website-hit-counter.com'>
                 <img src='https://www.free-website-hit-counter.com/c.php?d=5&id=146730&s=36' border='0' alt='Free Website Hit Counter'>
@@ -301,20 +295,14 @@ async function main() {
                 font-size: 80%;
                 opacity: calc(30%);
             }
-            .bh-hover:hover,
-            .bh-hover:focus {
-                background-color: gainsboro;
-                text-decoration: none;
-                cursor: pointer;
-            }
-            
+
             /* DICTIONARY Modal background */
             .bh-modal {
                 display: none; /* Hidden by default */
                 position: fixed; /* Stay in place */
                 z-index: 99; /* Sit on top */
                 padding-top: 60px; /* Location of the box */
-                padding-right: 0px;
+                padding-right: 40px;
                 left: 0;
                 top: 0;
                 width: 100%; /* Full width */
@@ -324,16 +312,16 @@ async function main() {
                 background-color: rgba(0,0,0,0.15); /* Black w/ opacity */
                 font-size: 90%;
             }
+            
             /* Modal Content */
             .bh-modal-content {
                 background-color: rgb(255, 221, 0);
-                margin-right: 0px;
-                right: 0;
+                margin-right: 75px;
+                right: 40;
                 padding: 7px;
                 border: 2px solid #888;
-                width: 18ch;
+                width: 16ch;
                 float: right;
-                overflow: auto;
             }
             
             /* Modal list items */
@@ -350,6 +338,15 @@ async function main() {
                 float: right;
                 font-size: 28px;
                 font-weight: bold;
+            }
+            
+            #bh-defineBtn:hover,
+            #bh-defineBtn:focus,
+            .bh-close:hover,
+            .bh-close:focus {
+                color: #000;
+                text-decoration: none;
+                cursor: pointer;
             }
         </style>
         `;
@@ -419,7 +416,6 @@ async function main() {
             let blank = getCookie("beehiveBlank");
             let remain = getCookie("beehiveRemaining");
             let subTot = getCookie("beehiveSubtotal");
-            let hideHint = getCookie("beehiveHideHints");
             El.SaveSettings.click();
             SaveSettings();
             if (blank === "true") {
@@ -443,18 +439,10 @@ async function main() {
             } else {
                 setCookie("beehiveSubtotal=false");
             }
-            if (hideHint === "true") {
-                El.HideHints.click();
-                ToggleHints();
-                setCookie("beehiveHideHints=true");
-            } else {
-                setCookie("beehiveHideHints=false");
-            }
          } else {
             setCookie("beehiveBlank=false");
             setCookie("beehiveRemaining=false");
             setCookie("beehiveSubtotal=false");
-            setCookie("beehiveHideHints=false");
             setCookie("beehiveSetting=false");
          }
         return;
@@ -833,7 +821,6 @@ async function main() {
         });
         if (WordsFound === WordsTotal) {
             El.Legend.innerHTML = 'CONGRATULATIONS, YOUR MAJESTY!';
-            El.TableHeader.removeAttribute("hidden");
             El.Table0.setAttribute("hidden", "");
         }
         return;
@@ -861,10 +848,6 @@ async function main() {
     }
 
     function ToggleChar3 () {
-        if (HideHintsTable) {
-            El.ShowChar3.click();
-            return;
-        }
         ShowChar3 = !ShowChar3;
         if (ShowChar3) {
             El.Table1.removeAttribute("hidden");
@@ -887,10 +870,6 @@ async function main() {
     }
 
     function ToggleHiddenCells (KLUDGE) {     // DEBUG - KLUDGE patch
-        if (HideHintsTable) {
-            El.ShowBlankCells.click();
-            return;
-        }
         ShowBlankCells = !ShowBlankCells; 
         ShowBlankCells ? setCookie("beehiveBlank=true") : setCookie("beehiveBlank=false");
         TablePtrs.forEach(item => {
@@ -927,10 +906,6 @@ async function main() {
     }
 
     function ToggleFoundRemaining () {
-        if (HideHintsTable) {
-            El.ShowRemaining.click();
-            return;
-        }
         ShowRemaining = !ShowRemaining;
         ShowRemaining ? setCookie("beehiveRemaining=true") : setCookie("beehiveRemaining=false");
         if (!ShowChar3) {
@@ -947,10 +922,6 @@ async function main() {
     }
 
     function ToggleSubtotals () {
-        if (HideHintsTable) {
-            El.SubTotalsAtTop.click();
-            return;
-        }
         let chr;            // row increment/decrement
         let rowstart;
         let rowend;
@@ -1017,37 +988,6 @@ async function main() {
         ToggleHiddenCells (KLUDGE);
         //  if (!ShowChar3) DisplayTable ();
 
-        return;
-    }
-
-    function ToggleHints () {
-        HideHintsTable = !HideHintsTable;
-        if (ShowChar3) {
-            ShowChar3 = false;
-            El.ShowChar3.click();
-        }
-        if (HideHintsTable) {
-            setCookie("beehiveHideHints=true");
-            El.TableHeader.setAttribute("hidden", "");
-            El.Table0.setAttribute("hidden", "");
-            El.Table1.setAttribute("hidden", "");
-        } else {
-            setCookie("beehiveHideHints=false");
-            El.TableHeader.removeAttribute("hidden");
-            El.Table0.removeAttribute("hidden");
-            if (ShowRemaining) {
-                El.Legend.innerHTML = `Σ = <font color="mediumvioletred"><b>TOTAL words</b>
-                <font color="black">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp# = <strong><b>REMAINING words</b></strong>`;
-            } else {
-                El.Legend.innerHTML = `Σ = <font color="mediumvioletred"><b><strong>TOTAL</strong> words</b>
-                <font color="black">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp# = <b>FOUND words</b>`;
-            }
-        }
-        if (WordsFound === WordsTotal) {
-            El.Legend.innerHTML = 'CONGRATULATIONS, YOUR MAJESTY!';
-            El.TableHeader.removeAttribute("hidden");
-            El.Table0.setAttribute("hidden", "");
-        }
         return;
     }
 
