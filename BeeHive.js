@@ -34,7 +34,7 @@ async function main() {
     // MAIN CONSTANTS AND VARIABLES
     //--------------------------------------
 
-    /* ----- System data ----- */
+    // System data
     const devicePhone = detectPhoneDevice();    // DEBUG: either should work, but .orientation will lose support
     // const devicePhone = (window.orientation === 'undefined') ? false : true;
     const hintDiv = setUpHintDiv();             // initialize DOM
@@ -72,7 +72,7 @@ async function main() {
      }
 
     // Table data
-    let tblPtrObj = {           // TablePtrs obj
+    let tblPtrObj = {           // Pointers into Table0 for each Char1 group
         rowHeader: 0,           // header row
         rowTotal: 0,            // total words in each column
         rowFound: 0,            // words found on each column
@@ -479,13 +479,10 @@ async function main() {
     }
 
 //======================================
-// MAIN SUPPORTING FUNCTION: INITIALIZE HINTS
+// MAIN SUPPORTING FUNCTIONS: INITIALIZE HINTS/TABLES
 //======================================
 
-    // -------------------------------------
     // Read HINTS page and generate all tables/lists
-    // -------------------------------------
-
     function InitializeHints () {
         let temp;
         let wordLengths = [];       // word lengths, appended to header
@@ -704,9 +701,7 @@ async function main() {
 // MAIN SUPPORTING FUNCTION:  UPDATE TABLES FROM FOUND WORDS
 //======================================
 
-    // -------------------------------------
     function UpdateList () {
-    // -------------------------------------
         // Cull ProcessedWords from WordList => new words into processList
         let processList = [];
         let inputList = [...El.WordList.querySelectorAll('li')];
@@ -861,7 +856,7 @@ async function main() {
     }
 
     function ToggleChar3 () {
-        if (HideHintsTable) {
+        if (HideHintsTable || ShowChar3) {
             El.ShowChar3.click();
             return;
         }
@@ -887,7 +882,7 @@ async function main() {
     }
 
     function ToggleHiddenCells (KLUDGE) {     // DEBUG - KLUDGE patch
-        if (HideHintsTable) {
+        if (HideHintsTable || ShowChar3) {
             El.ShowBlankCells.click();
             return;
         }
@@ -927,7 +922,7 @@ async function main() {
     }
 
     function ToggleFoundRemaining () {
-        if (HideHintsTable) {
+        if (HideHintsTable || ShowChar3) {
             El.ShowRemaining.click();
             return;
         }
@@ -947,7 +942,7 @@ async function main() {
     }
 
     function ToggleSubtotals () {
-        if (HideHintsTable) {
+        if (HideHintsTable || ShowChar3) {
             El.SubTotalsAtTop.click();
             return;
         }
@@ -1061,7 +1056,7 @@ async function main() {
     }
 
 //======================================
-// DICTIONARY FUNCTION/MODULE
+// DICTIONARY MODULE
 //======================================
 
     let bhmodal = ``;                                               // Modal container
@@ -1070,8 +1065,7 @@ async function main() {
     const bhmodalList = document.getElementById("bh-modal-list");   // Modal innerHTML
     let bhwin;
 
-    // When the user clicks DEFINITION button, open the modal 
-    btn.onclick = function() {
+    btn.onclick = function() {              // Open the modal
         ProcessedWords.sort();
         bhmodal = document.getElementById("bh-myModal");
         bhmodal.style.display = "block";
@@ -1085,15 +1079,12 @@ async function main() {
     return;
     }
 
-// When the user clicks on <span> (x), close the modal
-    span.onclick = function() {
+    span.onclick = function() {             // Close the modal
         bhmodal.style.display = "none";
         bhwin = window.open("", "bhWin");
         bhwin.close();
     }
-
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function(event) {
+    window.onclick = function(event) {      // Close if clicked outside the modal
         if (event.target == bhmodal) {
             bhmodal.style.display = "none";
             bhwin = window.open("", "bhWin");
@@ -1102,17 +1093,17 @@ async function main() {
     }
 
 //======================================
-// SHOW  COUNTER FUNCTION
+// TOGGLE SHOW-COUNTER MODULE
 //======================================
 
-    let show = false;
-    const counterEl = document.getElementById("bh-counter");
-    document.getElementById("bh-button").onclick = function () {
-        show = !show;
-        show ? counterEl.removeAttribute("hidden") 
-             : counterEl.setAttribute("hidden", "");
-        return;
-    }
+    // let show = false;
+    // const counterEl = document.getElementById("bh-counter");
+    // document.getElementById("bh-button").onclick = function () {
+    //     show = !show;
+    //     show ? counterEl.removeAttribute("hidden") 
+    //          : counterEl.setAttribute("hidden", "");
+    //     return;
+    // }
 
 }       // end of main function
 })();   // end of outer shell function
