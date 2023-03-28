@@ -1096,14 +1096,14 @@ async function main() {
 // TOGGLE SHOW-COUNTER MODULE
 //======================================
 
-    // let show = false;
-    // const counterEl = document.getElementById("bh-counter");
-    // document.getElementById("bh-button").onclick = function () {
-    //     show = !show;
-    //     show ? counterEl.removeAttribute("hidden") 
-    //          : counterEl.setAttribute("hidden", "");
-    //     return;
-    // }
+    let show = false;
+    const counterEl = document.getElementById("bh-counter");
+    document.getElementById("bh-button").onclick = function () {
+        show = !show;
+        show ? counterEl.removeAttribute("hidden") 
+             : counterEl.setAttribute("hidden", "");
+        return;
+    }
 
 }       // end of main function
 })();   // end of outer shell function
