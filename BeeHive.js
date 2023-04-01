@@ -856,7 +856,7 @@ async function main() {
     }
 
     function ToggleChar3 () {
-        if (HideHintsTable || ShowChar3) {
+        if (HideHintsTable) {
             El.ShowChar3.click();
             return;
         }
