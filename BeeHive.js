@@ -58,10 +58,13 @@ async function main() {
         Legend: document.getElementById('legend'),
         Table0: document.getElementById('table0'),
         Table1: document.getElementById('table1'),
-        Char3Container: document.getElementById('char3container'),
+        Container1: document.getElementById('container1'),
         ShowChar3: document.getElementById('char3'),
+        Container2: document.getElementById('container2'),
         ShowBlankCells: document.getElementById('hideEmptyCells'),
+        Container3: document.getElementById('container3'),
         ShowRemaining: document.getElementById('showRemaining'),
+        Container4: document.getElementById('container4'),
         SubTotalsAtTop: document.getElementById('subTotalsAtTop'),
         HideHints: document.getElementById('bh-hideHints'),
         SaveSettings: document.getElementById('saveSettings'),
@@ -214,12 +217,12 @@ async function main() {
             </tr></table>
         <table id="table0"></table><br>
         <table id="table1" hidden></table>
-        <p id="char3container" class="inputs"><input id="char3" class="bh-hover" type="checkbox">&nbspHelp! - show 3-letter hints</input></p>
-        <p class="inputs"><input id="hideEmptyCells" class="bh-hover" type="checkbox">&nbspShow completed rows and columns</input></p>
-        <p class="inputs"><input id="showRemaining" class="bh-hover" type="checkbox">&nbspShow number of words remaining</input></p>
-        <p class="inputs"><input id="subTotalsAtTop" class="bh-hover" type="checkbox">&nbspPlace subtotal line above letter tallies</input></p>
-        <p class="inputs"><input id="bh-hideHints" class="bh-hover" type="checkbox">&nbspHide hints (unclick to change menu)</input></p>
-        <p class="inputs"><input id="saveSettings" class="bh-hover" type="checkbox">&nbspSave settings</input></p>
+        <p id="container2" class="inputs"><input id="hideEmptyCells" class="bh-hover" type="checkbox">&nbsp* Show completed rows and columns</input></p>
+        <p id="container3" class="inputs"><input id="showRemaining" class="bh-hover" type="checkbox">&nbsp* Show number of words remaining</input></p>
+        <p id="container4" class="inputs"><input id="subTotalsAtTop" class="bh-hover" type="checkbox">&nbsp* Place subtotal line above letter tallies</input></p>
+        <p id="container1" class="inputs"><input id="char3" class="bh-hover" type="checkbox">&nbspHelp! - show 3-letter hints</input></p>
+        <p class="inputs"><input id="bh-hideHints" class="bh-hover" type="checkbox">&nbspHide hints</input></p>
+        <p class="inputs"><input id="saveSettings" class="bh-hover" type="checkbox">&nbspSave * settings</input></p>
         <p class="inputs" style="margin-top: 3px"><button id="bh-defineBtn" class="bh-hover">Definitions</button></p>
         <p class="inputs" style="margin-top: 3px"><button id="bh-share" class="bh-hover">Share this program</button></p>
         <p class="inputs" id="bh-button"><br>Bee Hive Release 1.24<br><br></p>
@@ -419,7 +422,7 @@ async function main() {
             let blank = getCookie("beehiveBlank");
             let remain = getCookie("beehiveRemaining");
             let subTot = getCookie("beehiveSubtotal");
-            let hideHint = getCookie("beehiveHideHints");
+            // let hideHint = getCookie("beehiveHideHints");
             El.SaveSettings.click();
             SaveSettings();
             if (blank === "true") {
@@ -443,18 +446,18 @@ async function main() {
             } else {
                 setCookie("beehiveSubtotal=false");
             }
-            if (hideHint === "true") {
-                El.HideHints.click();
-                ToggleHints();
-                setCookie("beehiveHideHints=true");
-            } else {
-                setCookie("beehiveHideHints=false");
-            }
+            // if (hideHint === "true") {
+            //     El.HideHints.click();
+            //     ToggleHints();
+            //     setCookie("beehiveHideHints=true");
+            // } else {
+            //     setCookie("beehiveHideHints=false");
+            // }
          } else {
             setCookie("beehiveBlank=false");
             setCookie("beehiveRemaining=false");
             setCookie("beehiveSubtotal=false");
-            setCookie("beehiveHideHints=false");
+            // setCookie("beehiveHideHints=false");
             setCookie("beehiveSetting=false");
          }
         return;
@@ -684,7 +687,7 @@ async function main() {
             Cell1.push(rowObj);
             El.Table1.appendChild(rowEl);
         }    
-        El.Char3Container.setAttribute("hidden", '');
+        El.Container1.setAttribute("hidden", '');
         Cell1[1][0].element.innerHTML = `Hint`;
         Cell1[1][0].element.style.borderBottom = "1px solid black";
         Cell1[1][1].element.innerHTML = `&nbsp&nbsp&nbsp`;
@@ -738,7 +741,7 @@ async function main() {
 
         DisplayMetaStats();
         if (+(document.querySelector(".sb-progress-value").innerText) >= Char3Score)
-            El.Char3Container.removeAttribute("hidden");
+            El.Container1.removeAttribute("hidden");
         if (ShowChar3) {
             Display3Char();
         } else {
@@ -1017,31 +1020,32 @@ async function main() {
 
     function ToggleHints () {
         HideHintsTable = !HideHintsTable;
-        if (ShowChar3) {
-            ShowChar3 = false;
-            El.ShowChar3.click();
-        }
         if (HideHintsTable) {
-            setCookie("beehiveHideHints=true");
+            // setCookie("beehiveHideHints=true");
             El.TableHeader.setAttribute("hidden", "");
             El.Table0.setAttribute("hidden", "");
             El.Table1.setAttribute("hidden", "");
+            El.Container1.setAttribute("hidden", "");
+            El.Container2.setAttribute("hidden", "");
+            El.Container3.setAttribute("hidden", "");
+            El.Container4.setAttribute("hidden", "");
         } else {
-            setCookie("beehiveHideHints=false");
+            // setCookie("beehiveHideHints=false");
             El.TableHeader.removeAttribute("hidden");
-            El.Table0.removeAttribute("hidden");
-            if (ShowRemaining) {
-                El.Legend.innerHTML = `Σ = <font color="mediumvioletred"><b>TOTAL words</b>
-                <font color="black">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp# = <strong><b>REMAINING words</b></strong>`;
-            } else {
-                El.Legend.innerHTML = `Σ = <font color="mediumvioletred"><b><strong>TOTAL</strong> words</b>
-                <font color="black">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp# = <b>FOUND words</b>`;
-            }
+            ShowChar3
+                ? El.Table1.removeAttribute("hidden")
+                : El.Table0.removeAttribute("hidden");
+            if (+(document.querySelector(".sb-progress-value").innerText) >= Char3Score) 
+                El.Container1.removeAttribute("hidden");
+            El.Container2.removeAttribute("hidden");
+            El.Container3.removeAttribute("hidden");
+            El.Container4.removeAttribute("hidden");
         }
         if (WordsFound === WordsTotal) {
             El.Legend.innerHTML = 'CONGRATULATIONS, YOUR MAJESTY!';
             El.TableHeader.removeAttribute("hidden");
             El.Table0.setAttribute("hidden", "");
+            El.Table1.setAttribute("hidden", "");
         }
         return;
     }
