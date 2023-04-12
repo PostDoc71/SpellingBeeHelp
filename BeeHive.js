@@ -213,7 +213,7 @@ async function main() {
         <p class="inputs"><input id="saveSettings" class="bh-hover" type="checkbox">&nbspSave * settings</input></p>
         <p class="inputs" style="margin-top: 3px"><button id="bh-defineBtn" class="bh-hover">Definitions</button></p>
         <p class="inputs" style="margin-top: 3px"><button id="bh-share" class="bh-hover">Share this program</button></p>
-        <p class="inputs" id="bh-button"><br>Bee Hive Release 1.24<br><br></p>
+        <p class="inputs" id="bh-button"><br>Bee Hive Release 1.25<br><br></p>
         <div align='center' id="bh-counter" hidden>
             <a href='https://www.free-website-hit-counter.com'>
                 <img src='https://www.free-website-hit-counter.com/c.php?d=5&id=146730&s=36' border='0' alt='Free Website Hit Counter'>
