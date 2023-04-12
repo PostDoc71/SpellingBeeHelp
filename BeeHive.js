@@ -7,8 +7,8 @@ window.hiveLoaded = true;                   // Do not allow to launch more than 
 /* ----- Do not launch while on Welcome or Queen Bee pages ----- */
 await waitForCondition(
     document.getElementById('js-hook-pz-moment__welcome'),      // Welcome page
-    document.getElementById('js-hook-pz-moment__congrats'));    // Queen Bee page
-
+    document.getElementById('js-hook-pz-moment__congrats')      // Queen Bee page
+);
 function waitForCondition(welcome, queenBee) {
     return new Promise(resolveElement => {
         const checkForCondition = () => {           // both frames invisible
@@ -35,8 +35,7 @@ async function main() {
     //--------------------------------------
 
     // System data
-    const devicePhone = detectPhoneDevice();    // DEBUG: either should work, but .orientation will lose support
-    // const devicePhone = (window.orientation === 'undefined') ? false : true;
+    const devicePhone = detectPhoneDevice();    // boolean, for future use
     const hintDiv = setUpHintDiv();             // initialize DOM
     const HintsHTML = await getHints();         // data from Spelling Bee page
 
@@ -45,8 +44,8 @@ async function main() {
     let ShowBlankCells = false;                 // toggle: show/hide empty data cells           
     let ShowRemaining = false;                  // toggle: show remaining vs found words
     let SubTotalsAtTop = false;                 // toggle: placement of subtotal line
-    let HideHintsTable = false;                 // toggle: make hints invisible
-    let SaveSetting = false;                    // toggle: save above in cookies
+    let HideHints = false;                      // toggle: make hints invisible
+    let SaveSetting = false;                    // toggle: save settings in cookies
 
     // Elements
     const El = {
@@ -56,17 +55,17 @@ async function main() {
         MetaStats4: document.getElementById('metastats4'),
         TableHeader: document.getElementById('header'),
         Legend: document.getElementById('legend'),
+        ContainerTables: document.getElementById('tablescontainer'),
         Table0: document.getElementById('table0'),
         Table1: document.getElementById('table1'),
-        Container1: document.getElementById('container1'),
+        ContainerCheckbox: document.getElementById('checkboxcontainer'),
+        Char3Container: document.getElementById('char3container'),
+        ContainerT0Checkbox: document.getElementById('t0checkboxcontainer'),
         ShowChar3: document.getElementById('char3'),
-        Container2: document.getElementById('container2'),
         ShowBlankCells: document.getElementById('hideEmptyCells'),
-        Container3: document.getElementById('container3'),
         ShowRemaining: document.getElementById('showRemaining'),
-        Container4: document.getElementById('container4'),
         SubTotalsAtTop: document.getElementById('subTotalsAtTop'),
-        HideHints: document.getElementById('bh-hideHints'),
+        HideHintsButton: document.getElementById('bh-hideHints'),
         SaveSettings: document.getElementById('saveSettings'),
         bhShare: document.getElementById('bh-share'),
         WordList: document.querySelector('.sb-wordlist-items-pag'),
@@ -130,7 +129,7 @@ async function main() {
     // Words data
     let LetterList = "";        // needed to find pangrams
     let ProcessedWords = [];    // list of already tabulated words
-    let RemainingWords =  window.gameData.today.answers.map(x => x.toUpperCase()).sort();
+    let RemainingWords = window.gameData.today.answers.map(x => x.toUpperCase()).sort();
 
     // -------------------------------------
     // MAIN PROGRAM
@@ -162,10 +161,10 @@ async function main() {
     El.SubTotalsAtTop.addEventListener('click', ToggleSubtotals);
 
     /* ----- Toggle hiding hints ----- */
-    El.HideHints.addEventListener('click', ToggleHints);
+    El.HideHintsButton.addEventListener('click', ToggleHints);
 
     /* ----- Toggle saving settings ----- */
-    El.SaveSettings.addEventListener('click', SaveSettings);
+    El.SaveSettings.addEventListener('click', ToggleSaveSettings);
 
     /* ----- Share this program ----- */
     El.bhShare.onclick = function() {
@@ -187,24 +186,7 @@ async function main() {
 
     /* ----- Create DOM for Bee Hive HTML ----- */
     function setUpHintDiv() {
-        let gameScreen;
-        if (devicePhone) {
-            gameScreen = document.querySelector('#portal-game-moments');
-        } else { 
-            gameScreen = document.querySelector('.pz-game-screen');
-        }
-        const parent = gameScreen.parentElement;
-        const container = document.createElement('div');
-        container.style.display = 'flex';
-        container.append(gameScreen);
-        parent.append(container);
-
-        const hintDiv = document.createElement('div');
-        hintDiv.style.padding = '10px';
-        container.append(hintDiv);
-
-        // Bee Hive HTML
-        hintDiv.innerHTML = `
+        const HTMLcontent = `
         <table>
             <td id="metastats1">Total points:&nbsp<br>Total words:&nbsp<br>Words Found:&nbsp</td>
             <td id="metastats2"></td>
@@ -215,13 +197,19 @@ async function main() {
             <td id="legend">Σ = <font color="mediumvioletred"><b>TOTAL words</b>
             <font color="black">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp# = <b>FOUND words</b></td>
             </tr></table>
-        <table id="table0"></table><br>
-        <table id="table1" hidden></table>
-        <p id="container2" class="inputs"><input id="hideEmptyCells" class="bh-hover" type="checkbox">&nbsp* Show completed rows and columns</input></p>
-        <p id="container3" class="inputs"><input id="showRemaining" class="bh-hover" type="checkbox">&nbsp* Show number of words remaining</input></p>
-        <p id="container4" class="inputs"><input id="subTotalsAtTop" class="bh-hover" type="checkbox">&nbsp* Place subtotal line above letter tallies</input></p>
-        <p id="container1" class="inputs"><input id="char3" class="bh-hover" type="checkbox">&nbspHelp! - show 3-letter hints</input></p>
-        <p class="inputs"><input id="bh-hideHints" class="bh-hover" type="checkbox">&nbspHide hints</input></p>
+        <div id="tablescontainer">
+            <table id="table0"></table><br>
+            <table id="table1" hidden></table>
+        </div>
+        <div id="checkboxcontainer">
+            <p id="char3container" class="inputs"><input id="char3" class="bh-hover" type="checkbox">&nbspHelp! - show 3-letter hints</input></p>
+            <div id="t0checkboxcontainer">
+                <p class="inputs"><input id="hideEmptyCells" class="bh-hover" type="checkbox">&nbsp* Show completed rows and columns</input></p>
+                <p class="inputs"><input id="showRemaining" class="bh-hover" type="checkbox">&nbsp* Show number of words remaining</input></p>
+                <p class="inputs"><input id="subTotalsAtTop" class="bh-hover" type="checkbox">&nbsp* Place subtotal line above letter tallies</input></p>
+            </div>
+        </div>
+        <p class="inputs"><input id="bh-hideHints" class="bh-hover" type="checkbox">&nbsp* Hide hints</input></p>
         <p class="inputs"><input id="saveSettings" class="bh-hover" type="checkbox">&nbspSave * settings</input></p>
         <p class="inputs" style="margin-top: 3px"><button id="bh-defineBtn" class="bh-hover">Definitions</button></p>
         <p class="inputs" style="margin-top: 3px"><button id="bh-share" class="bh-hover">Share this program</button></p>
@@ -356,23 +344,41 @@ async function main() {
             }
         </style>
         `;
-    return hintDiv;
+        let gameScreen;
+        if (devicePhone) {
+            gameScreen = document.querySelector('#portal-game-moments');
+        } else { 
+            gameScreen = document.querySelector('.pz-game-screen');
+        }
+        const parent = gameScreen.parentElement;
+        const container = document.createElement('div');
+        container.style.display = 'flex';
+        container.append(gameScreen);
+        parent.append(container);
+
+        const hintDiv = document.createElement('div');
+        hintDiv.style.padding = '10px';
+        container.append(hintDiv);
+
+        // Bee Hive HTML
+        hintDiv.innerHTML = HTMLcontent;
+        return hintDiv;
     }
 
     /* ----- Detect device ----- */
-    function detectPhoneDevice () {
+    function detectPhoneDevice () {     
         return false;
-        // if (navigator.userAgent.match(/Android/i)
-        // || navigator.userAgent.match(/webOS/i)
-        // || navigator.userAgent.match(/iPhone/i)
-        // || navigator.userAgent.match(/iPad/i)
-        // || navigator.userAgent.match(/iPod/i)
-        // || navigator.userAgent.match(/BlackBerry/i)
-        // || navigator.userAgent.match(/Windows Phone/i)) {
-        //    return true ;
-        // } else {
-        //    return false ;
-        // }
+        if (navigator.userAgent.match(/Android/i)
+        || navigator.userAgent.match(/webOS/i)
+        || navigator.userAgent.match(/iPhone/i)
+        || navigator.userAgent.match(/iPad/i)
+        || navigator.userAgent.match(/iPod/i)
+        || navigator.userAgent.match(/BlackBerry/i)
+        || navigator.userAgent.match(/Windows Phone/i)) {
+           return true ;
+        } else {
+           return false ;
+        }
      }
 
     /* ----- Open Today's Hints page for data ----- */
@@ -422,9 +428,9 @@ async function main() {
             let blank = getCookie("beehiveBlank");
             let remain = getCookie("beehiveRemaining");
             let subTot = getCookie("beehiveSubtotal");
-            // let hideHint = getCookie("beehiveHideHints");
+            let hideHint = getCookie("beehiveHideHints");
             El.SaveSettings.click();
-            SaveSettings();
+            ToggleSaveSettings();
             if (blank === "true") {
                 El.ShowBlankCells.click();
                 ToggleHiddenCells();
@@ -446,26 +452,20 @@ async function main() {
             } else {
                 setCookie("beehiveSubtotal=false");
             }
-            // if (hideHint === "true") {
-            //     El.HideHints.click();
-            //     ToggleHints();
-            //     setCookie("beehiveHideHints=true");
-            // } else {
-            //     setCookie("beehiveHideHints=false");
-            // }
+            if (hideHint === "true") {
+                El.HideHintsButton.click();
+                ToggleHints();
+                setCookie("beehiveHideHints=true");
+            } else {
+                setCookie("beehiveHideHints=false");
+            }
          } else {
             setCookie("beehiveBlank=false");
             setCookie("beehiveRemaining=false");
             setCookie("beehiveSubtotal=false");
-            // setCookie("beehiveHideHints=false");
+            setCookie("beehiveHideHints=false");
             setCookie("beehiveSetting=false");
          }
-        return;
-    }
-
-    function SaveSettings () {
-        SaveSetting = SaveSetting ? false : true;
-        SaveSetting ? setCookie("beehiveSetting=true") : setCookie("beehiveSetting=false");
         return;
     }
 
@@ -664,12 +664,12 @@ async function main() {
                     Cell[row][col].element.style.backgroundColor = "whitesmoke";
                 }
             }
-            row = item.rowHeader - 2;
+            row = item.rowHeader - 2;                               // line zw sections, at top
             for (let col = 0; col <= ColEnd; col++) {
                 Cell[row][col].element.style.borderBottom = "1px solid black";
             }
         })
-        for (let col = 0; col <= ColEnd; col++) {
+        for (let col = 0; col <= ColEnd; col++) {                   // line at bottom of table
             Cell[TableTotalRows - 1][col].element.style.borderBottom = "1px solid black";
         }
         return;
@@ -687,16 +687,13 @@ async function main() {
             Cell1.push(rowObj);
             El.Table1.appendChild(rowEl);
         }    
-        El.Container1.setAttribute("hidden", '');
+        El.Char3Container.setAttribute("hidden", '');
         Cell1[1][0].element.innerHTML = `Hint`;
         Cell1[1][0].element.style.borderBottom = "1px solid black";
         Cell1[1][1].element.innerHTML = `&nbsp&nbsp&nbsp`;
         Cell1[1][2].element.innerHTML = `Length`;
         Cell1[1][2].element.style.borderBottom = "1px solid black";
         Cell1[3][0].element.innerHTML = `&nbsp`;
-        Cell1[4][0].element.innerHTML = `&nbsp`;
-        for (let i = 0; i < 3; i++)
-            Cell1[3][i].element.style.borderBottom = "1px solid black";
         return;    
     }    
     
@@ -741,7 +738,7 @@ async function main() {
 
         DisplayMetaStats();
         if (+(document.querySelector(".sb-progress-value").innerText) >= Char3Score)
-            El.Container1.removeAttribute("hidden");
+            El.Char3Container.removeAttribute("hidden");
         if (ShowChar3) {
             Display3Char();
         } else {
@@ -829,41 +826,36 @@ async function main() {
                 Cell[item.rowFound][2].element.innerText = Table[item.rowFound][1] - Table[item.rowFound][2];
             }
         });
-        if (WordsFound === WordsTotal) {
-            El.Legend.innerHTML = 'CONGRATULATIONS, YOUR MAJESTY!';
-            El.TableHeader.removeAttribute("hidden");
-            El.Table0.setAttribute("hidden", "");
-        }
+        if (WordsFound === WordsTotal) CongratsQB();
         return;
     }
 
     function Display3Char() {
-        if (RemainingWords.length > 0) {
+        if (WordsFound != WordsTotal) {
             let ch3 = ``;
             let len3 = ``;
             for (let i = 0; i < RemainingWords.length; i++) {
                 ch3 += RemainingWords[i].slice(0, 3) + `<br>`;
                 len3 += RemainingWords[i].length + `<br>`;
-                Cell1[2][0].element.innerHTML = ch3;
-                Cell1[2][2].element.innerHTML = len3;
             }
+            Cell1[2][0].element.innerHTML = ch3;
+            Cell1[2][2].element.innerHTML = len3;
         } else {
-            if ((+gameData.today.printDate.at(-1) % 3) === 1) {
-                El.Legend.innerHTML = 'LON LIV THE QUE!';
-            } else {
-                El.Legend.innerHTML = 'LONG LIVE THE QUEEN!';
-            }
             El.Table1.setAttribute("hidden", "");
+            CongratsQB;
         }
         return;
     }
 
     function ToggleChar3 () {
-        if (HideHintsTable) {
-            El.ShowChar3.click();
+        ShowChar3 = !ShowChar3;
+        ShowChar3
+            ? El.ContainerT0Checkbox.setAttribute("hidden", "")
+            : El.ContainerT0Checkbox.removeAttribute("hidden");
+        if (WordsFound === WordsTotal) {
+            CongratsQB();
             return;
         }
-        ShowChar3 = !ShowChar3;
         if (ShowChar3) {
             El.Table1.removeAttribute("hidden");
             El.Table0.setAttribute("hidden", "");
@@ -885,10 +877,6 @@ async function main() {
     }
 
     function ToggleHiddenCells (KLUDGE) {     // DEBUG - KLUDGE patch
-        if (HideHintsTable || ShowChar3) {
-            El.ShowBlankCells.click();
-            return;
-        }
         ShowBlankCells = !ShowBlankCells; 
         ShowBlankCells ? setCookie("beehiveBlank=true") : setCookie("beehiveBlank=false");
         TablePtrs.forEach(item => {
@@ -925,10 +913,6 @@ async function main() {
     }
 
     function ToggleFoundRemaining () {
-        if (HideHintsTable || ShowChar3) {
-            El.ShowRemaining.click();
-            return;
-        }
         ShowRemaining = !ShowRemaining;
         ShowRemaining ? setCookie("beehiveRemaining=true") : setCookie("beehiveRemaining=false");
         if (!ShowChar3) {
@@ -945,10 +929,6 @@ async function main() {
     }
 
     function ToggleSubtotals () {
-        if (HideHintsTable || ShowChar3) {
-            El.SubTotalsAtTop.click();
-            return;
-        }
         let chr;            // row increment/decrement
         let rowstart;
         let rowend;
@@ -1019,35 +999,47 @@ async function main() {
     }
 
     function ToggleHints () {
-        HideHintsTable = !HideHintsTable;
-        if (HideHintsTable) {
-            // setCookie("beehiveHideHints=true");
+        HideHints = !HideHints;
+        if (HideHints) {
+            setCookie("beehiveHideHints=true");
             El.TableHeader.setAttribute("hidden", "");
-            El.Table0.setAttribute("hidden", "");
-            El.Table1.setAttribute("hidden", "");
-            El.Container1.setAttribute("hidden", "");
-            El.Container2.setAttribute("hidden", "");
-            El.Container3.setAttribute("hidden", "");
-            El.Container4.setAttribute("hidden", "");
+            El.ContainerTables.setAttribute("hidden", "");
+            El.ContainerCheckbox.setAttribute("hidden", "");
         } else {
-            // setCookie("beehiveHideHints=false");
+            setCookie("beehiveHideHints=false");
             El.TableHeader.removeAttribute("hidden");
-            ShowChar3
-                ? El.Table1.removeAttribute("hidden")
-                : El.Table0.removeAttribute("hidden");
+            El.ContainerTables.removeAttribute("hidden");
+            El.ContainerCheckbox.removeAttribute("hidden");
+            // ShowChar3
+            //     ? El.Table1.removeAttribute("hidden")
+            //     : El.Table0.removeAttribute("hidden");
             if (+(document.querySelector(".sb-progress-value").innerText) >= Char3Score) 
-                El.Container1.removeAttribute("hidden");
-            El.Container2.removeAttribute("hidden");
-            El.Container3.removeAttribute("hidden");
-            El.Container4.removeAttribute("hidden");
+                El.Char3Container.removeAttribute("hidden");
+            if (!ShowChar3) El.ContainerT0Checkbox.removeAttribute("hidden");
         }
-        if (WordsFound === WordsTotal) {
-            El.Legend.innerHTML = 'CONGRATULATIONS, YOUR MAJESTY!';
-            El.TableHeader.removeAttribute("hidden");
-            El.Table0.setAttribute("hidden", "");
-            El.Table1.setAttribute("hidden", "");
-        }
+        if ((WordsFound === WordsTotal) && WordsTotal > 0) CongratsQB();
         return;
+    }
+ 
+    function ToggleSaveSettings () {
+        SaveSetting = !SaveSetting;
+        SaveSetting ? setCookie("beehiveSetting=true") : setCookie("beehiveSetting=false");
+        return;
+    }
+
+    function CongratsQB() {
+        if (ShowChar3) {
+            if ((+gameData.today.printDate.at(-1) % 4) === 1) {
+                El.Legend.innerHTML = `LON LIV THE QUE!<br>&nbsp`;
+            } else {
+                El.Legend.innerHTML = `LONG LIVE THE QUEEN!<br>&nbsp`;
+            }
+        } else {
+            El.Legend.innerHTML = `CONGRATULATIONS, YOUR MAJESTY!<br>&nbsp`;
+        }
+        El.Table0.setAttribute("hidden", "");
+        El.Table1.setAttribute("hidden", "");
+        El.TableHeader.removeAttribute("hidden");
     }
 
     function HideOnQBPopup () {
