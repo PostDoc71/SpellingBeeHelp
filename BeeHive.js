@@ -762,6 +762,11 @@ async function main() {
     }
 
     function DisplayTable () {
+        if (WordsFound === WordsTotal) {        // all pau
+            CongratsQB();
+            return;
+        }
+
         // Map Table to HTML
         for (let i = 0; i < TableTotalRows; i++) {
             for (let j = 0; j <= ColEnd; j++) Cell[i][j].element.innerText = Table[i][j];
@@ -826,7 +831,7 @@ async function main() {
                 Cell[item.rowFound][2].element.innerText = Table[item.rowFound][1] - Table[item.rowFound][2];
             }
         });
-        if (WordsFound === WordsTotal) CongratsQB();
+
         return;
     }
 
