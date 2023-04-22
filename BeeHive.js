@@ -22,17 +22,9 @@ function waitForCondition(welcome, queenBee) {
     });
 }
 
-main();
-      
 //======================================
-// MAIN FUNCTION
+// MAIN CONSTANTS AND VARIABLES
 //======================================
-
-async function main() {
-
-    //--------------------------------------
-    // MAIN CONSTANTS AND VARIABLES
-    //--------------------------------------
 
     // System data
     const devicePhone = detectPhoneDevice();    // boolean, for future use
@@ -131,9 +123,9 @@ async function main() {
     let ProcessedWords = [];    // list of already tabulated words
     let RemainingWords = window.gameData.today.answers.map(x => x.toUpperCase()).sort();
 
-    // -------------------------------------
-    // MAIN PROGRAM
-    // -------------------------------------
+//======================================
+// MAIN PROGRAM
+//======================================
 
     /* ----- Retrieve saved settings ----- */
     RetrieveSavedSettings();
@@ -181,7 +173,7 @@ async function main() {
     observeQBPage.observe(El.QueenBeePage, {attributes: true});
 
 //======================================
-// SYSTEM DATA
+// SYSTEM DATA/FUNCTIONS
 //======================================
 
     /* ----- Create DOM for Bee Hive HTML ----- */
@@ -348,7 +340,8 @@ async function main() {
         if (devicePhone) {
             gameScreen = document.querySelector('#portal-game-moments');
         } else { 
-            gameScreen = document.querySelector('.pz-game-screen');
+            // gameScreen = document.querySelector('#js-hook-pz-moment__game');
+            gameScreen = document.getElementById('js-hook-pz-moment__game');
         }
         const parent = gameScreen.parentElement;
         const container = document.createElement('div');
@@ -368,17 +361,17 @@ async function main() {
     /* ----- Detect device ----- */
     function detectPhoneDevice () {     
         return false;
-        if (navigator.userAgent.match(/Android/i)
-        || navigator.userAgent.match(/webOS/i)
-        || navigator.userAgent.match(/iPhone/i)
-        || navigator.userAgent.match(/iPad/i)
-        || navigator.userAgent.match(/iPod/i)
-        || navigator.userAgent.match(/BlackBerry/i)
-        || navigator.userAgent.match(/Windows Phone/i)) {
-           return true ;
-        } else {
-           return false ;
-        }
+        // if (navigator.userAgent.match(/Android/i)
+        // || navigator.userAgent.match(/webOS/i)
+        // || navigator.userAgent.match(/iPhone/i)
+        // || navigator.userAgent.match(/iPad/i)
+        // || navigator.userAgent.match(/iPod/i)
+        // || navigator.userAgent.match(/BlackBerry/i)
+        // || navigator.userAgent.match(/Windows Phone/i)) {
+        //    return true ;
+        // } else {
+        //    return false ;
+        // }
      }
 
     /* ----- Open Today's Hints page for data ----- */
@@ -836,7 +829,9 @@ async function main() {
     }
 
     function Display3Char() {
-        if (WordsFound != WordsTotal) {
+        if (WordsFound === WordsTotal) {        // all pau
+            CongratsQB();
+        } else {
             let ch3 = ``;
             let len3 = ``;
             for (let i = 0; i < RemainingWords.length; i++) {
@@ -845,9 +840,6 @@ async function main() {
             }
             Cell1[2][0].element.innerHTML = ch3;
             Cell1[2][2].element.innerHTML = len3;
-        } else {
-            El.Table1.setAttribute("hidden", "");
-            CongratsQB;
         }
         return;
     }
@@ -1034,7 +1026,7 @@ async function main() {
 
     function CongratsQB() {
         if (ShowChar3) {
-            if ((+gameData.today.printDate.at(-1) % 4) === 1) {
+            if ((+gameData.today.printDate.at(-1) % 5) === 1) {
                 El.Legend.innerHTML = `LON LIV THE QUE!<br>&nbsp`;
             } else {
                 El.Legend.innerHTML = `LONG LIVE THE QUEEN!<br>&nbsp`;
@@ -1057,7 +1049,7 @@ async function main() {
     }
 
 //======================================
-// DICTIONARY MODULE
+// MODULE: DICTIONARY
 //======================================
 
     let bhmodal = ``;                                               // Modal container
@@ -1094,7 +1086,7 @@ async function main() {
     }
 
 //======================================
-// TOGGLE SHOW-COUNTER MODULE
+// MODULE: TOGGLE SHOW-COUNTER
 //======================================
 
     let show = false;
@@ -1106,5 +1098,4 @@ async function main() {
         return;
     }
 
-}       // end of main function
 })();   // end of outer shell function
