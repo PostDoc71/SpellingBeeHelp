@@ -1065,7 +1065,7 @@ function waitForCondition(welcome, queenBee) {
         let temp = `<dl>`;
         for (let i = 0; i < ProcessedWords.length; i++)
         temp += `<dt class="bh-modal-item" onclick='window.open("https://www.merriam-webster.com/dictionary/` 
-            + ProcessedWords[i] + `", "bhWin", "toolbar=yes,scrollbars=yes,resizable=yes,top=50,left=700,width=750,height=600")'>`
+            + ProcessedWords[i] + `", "bhWin", "toolbar=yes,scrollbars=yes,resizable=yes,top=50,left=575,width=750,height=600")'>`
             + `&nbsp;` + ProcessedWords[i] + `</dt>`;
         temp += `</dl>`;
         bhmodalList.innerHTML = temp;
