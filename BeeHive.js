@@ -214,7 +214,7 @@ function waitForCondition(welcome, queenBee) {
         </div>
         <div id="bh-myModal" class="bh-modal">
             <div class="bh-modal-content"> 
-                &nbsp;Define:<span class="bh-close">&times;</span>
+                &nbsp;Define:<span class="bh-close bh-modal-item">&times;</span>
                 <div id="bh-modal-list" style="border-top-style: 1px solid black;">
             </div>
         </div>
@@ -1062,7 +1062,7 @@ function waitForCondition(welcome, queenBee) {
         ProcessedWords.sort();
         bhmodal = document.getElementById("bh-myModal");
         bhmodal.style.display = "block";
-        let temp = `<dl>`;
+        let temp = `<dl><dt>&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;</dt>`;
         for (let i = 0; i < ProcessedWords.length; i++)
         temp += `<dt class="bh-modal-item" onclick='window.open("https://www.merriam-webster.com/dictionary/` 
             + ProcessedWords[i] + `", "bhWin", "toolbar=yes,scrollbars=yes,resizable=yes,top=50,left=575,width=750,height=600")'>`
