@@ -2,7 +2,8 @@
 
 (async () => {            // OUTER SHELL
 
-window.hiveLoaded = true;                   // Do not allow to launch more than once
+if (window.hiveLoaded) return;                  // Do not allow to launch more than once
+window.hiveLoaded = true;
 
 /* ----- Do not launch while on Welcome or Queen Bee pages ----- */
 await waitForCondition(
@@ -213,11 +214,15 @@ function waitForCondition(welcome, queenBee) {
             <small><a href='https://www.free-website-hit-counter.com' title="Free Website Hit Counter">Free website hit counter</a></small>
         </div>
         <div id="bh-myModal" class="bh-modal">
-            <div class="bh-modal-content"> 
-                &nbsp;Define:<span class="bh-close bh-modal-item">&times;</span>
-                <div id="bh-modal-list" style="border-top-style: 1px solid black;">
+            <div class="bh-modal-content">
+                <div class="bh-modal-header">
+                    <dl>    
+                        <dt>&nbsp;Define<span class="bh-close bh-modal-item">&times;</span></dt>
+                        <dt>&nbsp;</dt>
+                    </dl>
+                </div>
+                <div id="bh-modal-list" style="border-top-style: 1px solid black;"></div>
             </div>
-        </div>
         </div>
         <style>
             #metastats1 {
@@ -303,8 +308,7 @@ function waitForCondition(welcome, queenBee) {
                 width: 100%; /* Full width */
                 height: 100%; /* Full height */
                 overflow: auto; /* Enable scroll if needed */
-                background-color: rgb(0,0,0); /* Fallback color */
-                background-color: rgba(0,0,0,0.15); /* Black w/ opacity */
+                background-color: rgba(250,250,250,0.85); /* Black w/ opacity */
                 font-size: 90%;
             }
             /* Modal Content */
@@ -320,6 +324,11 @@ function waitForCondition(welcome, queenBee) {
             }
             
             /* Modal list items */
+            .bh-modal-header {
+                font-size: 16px;
+                font-weight: bold;
+                border-bottom-style: 2px solid;
+            }
             .bh-modal-item:hover,
             .bh-modal-item:focus {
                 background-color: beige;
@@ -329,7 +338,7 @@ function waitForCondition(welcome, queenBee) {
         
             /* The Close Button */
             .bh-close {
-                color: #aaaaaa;
+                color: DarkBlue;
                 float: right;
                 font-size: 28px;
                 font-weight: bold;
@@ -1062,7 +1071,8 @@ function waitForCondition(welcome, queenBee) {
         ProcessedWords.sort();
         bhmodal = document.getElementById("bh-myModal");
         bhmodal.style.display = "block";
-        let temp = `<dl><dt>&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;</dt>`;
+        let temp = `<dl>`;
+        // let temp = `<dl><dt>&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;</dt>`;
         for (let i = 0; i < ProcessedWords.length; i++)
         temp += `<dt class="bh-modal-item" onclick='window.open("https://www.merriam-webster.com/dictionary/` 
             + ProcessedWords[i] + `", "bhWin", "toolbar=yes,scrollbars=yes,resizable=yes,top=50,left=575,width=750,height=600")'>`
