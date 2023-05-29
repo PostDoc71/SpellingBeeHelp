@@ -49,7 +49,7 @@ function customAlert(text, title, button) {
     mObj.style.height = d.documentElement.scrollHeight + "px";
     mObj.innerHTML = `    <style>
     #modalContainer {
-        background-color:rgba(0, 0, 0, 0.15);
+        background-color:rgba(250, 250, 250, 0.85);
         position:absolute;
         width:100%;
         height:100%;
