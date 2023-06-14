@@ -116,7 +116,7 @@ function waitForCondition(welcome, queenBee) {
     let PangramsTotal = 0;
     let PangramsFound = 0;
     let TotalPoints = 0;
-    let GeniusScore = 142; await getGeniusScore();
+    let GeniusScore = await getGeniusScore();
     let Char3Score = 0;
     
     // Words data
@@ -402,7 +402,7 @@ function waitForCondition(welcome, queenBee) {
         [...document.querySelectorAll(".pz-dropdown__menu-item")][1].click();
         await waitForElement('.sb-modal-title');
         const geniusElement =       // menus for logged-in and logged-out
-            document.querySelector('.sb-modal-ranks__list')?.querySelectorAll('td')[3] ||
+            document.querySelector('.sb-modal-ranks__rank-points') ||
             document.querySelector('.sb-modal-list')?.querySelector('li:last-of-type');
         const score = +geniusElement?.innerText.replace(/\D/g, '');
         document.querySelector('.sb-modal-close').click();
