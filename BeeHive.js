@@ -405,6 +405,7 @@ function waitForCondition(welcome, queenBee) {
             document.querySelector('.sb-modal-ranks__rank-points') ||
             document.querySelector('.sb-modal-list')?.querySelector('li:last-of-type');
         const score = +geniusElement?.innerText.replace(/\D/g, '');
+        alert(score);
         document.querySelector('.sb-modal-close').click();
         return score;
 
