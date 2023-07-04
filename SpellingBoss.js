@@ -9,7 +9,7 @@
 // const oops = false;
 const oops = true;
 if (oops) {
-    customAlert('Bee Hive temporarily out of order.  Main program has been altered.', 'OOPS', 'Continue')
+    customAlert("Bee Hive temporarily out of order.  Main program has been altered.  I'm working on fixes.", 'OOPS', 'Continue')
 
 /* ----- Do not allow to launch more than once ----- */
 } else if (window.hiveLoaded) {
