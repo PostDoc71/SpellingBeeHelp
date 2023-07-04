@@ -399,8 +399,10 @@ function waitForCondition(welcome, queenBee) {
 
     /* ----- Open Rankings pop-up for GeniusScore ----- */
     async function getGeniusScore() {
+        // [...document.querySelectorAll(".pz-dropdown__button")][1].click();
         [...document.querySelectorAll(".pz-dropdown__menu-item")][1].click();
-        await waitForElement('.sb-modal-title');
+        // await waitForElement('.sb-modal-title');
+        await waitForElement('.sb-modal-body');
         const geniusElement =       // menus for logged-in and logged-out
             document.querySelector('.sb-modal-ranks__rank-points') ||
             document.querySelector('.sb-modal-list')?.querySelector('li:last-of-type');
