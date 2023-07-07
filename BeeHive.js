@@ -41,7 +41,7 @@ function waitForCondition(welcome, queenBee) {
     let SaveSetting = false;                    // toggle: save settings in cookies
 
     // Elements
-    const El = {
+    const El = {    
         MetaStats1: document.getElementById('metastats1'),
         MetaStats2: document.getElementById('metastats2'),
         MetaStats3: document.getElementById('metastats3'),
@@ -116,7 +116,8 @@ function waitForCondition(welcome, queenBee) {
     let PangramsTotal = 0;
     let PangramsFound = 0;
     let TotalPoints = 0;
-    let GeniusScore = await getGeniusScore();
+    let GeniusScore = '?';
+    // let GeniusScore = await getGeniusScore();
     let Char3Score = 0;
     
     // Words data
