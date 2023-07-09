@@ -116,8 +116,8 @@ function waitForCondition(welcome, queenBee) {
     let PangramsTotal = 0;
     let PangramsFound = 0;
     let TotalPoints = 0;
-    let GeniusScore = 216;
-    // let GeniusScore = await getGeniusScore();
+    // let GeniusScore = 216;
+    let GeniusScore = await getGeniusScore();
     let Char3Score = 0;
     
     // Words data
@@ -400,8 +400,8 @@ function waitForCondition(welcome, queenBee) {
 
     /* ----- Open Rankings pop-up for GeniusScore ----- */
     async function getGeniusScore() {
-        debugger;
-        [...document.querySelectorAll(".pz-dropdown__button")][1].click();
+        [...document.querySelectorAll(".pz-dropdown__button")][0].click();
+        [...document.querySelectorAll(".pz-dropdown__button")][2].click();
         await waitForElement('.sb-modal-body');
         const geniusElement =       // menus for logged-in and logged-out
             document.querySelector('.sb-modal-ranks__rank-points') ||
