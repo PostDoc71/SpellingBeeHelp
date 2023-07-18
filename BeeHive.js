@@ -116,8 +116,8 @@ function waitForCondition(welcome, queenBee) {
     let PangramsTotal = 0;
     let PangramsFound = 0;
     let TotalPoints = 0;
-    let GeniusScore = 173;
-    // let GeniusScore = await getGeniusScore();
+    // let GeniusScore = 173;
+    let GeniusScore = await getGeniusScore();
     let Char3Score = 0;
     
     // Words data
