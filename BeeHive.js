@@ -404,7 +404,7 @@ function waitForCondition(welcome, queenBee) {
         [...document.querySelectorAll(".pz-dropdown__button")][2].click();
         await waitForElement('.sb-modal-body');
         const geniusElement =       // menus for logged-in and logged-out
-            document.querySelectorAll('.sb-modal-ranks__rank-points')[6] ||
+            document.querySelectorAll('.sb-modal-ranks__rank-points')[0] ||
             document.querySelector('.sb-modal-list')?.querySelector('li:last-of-type');
         const score = +geniusElement?.innerText.replace(/\D/g, '');
         document.querySelector('.sb-modal-close').click();
