@@ -116,7 +116,6 @@ function waitForCondition(welcome, queenBee) {
     let PangramsTotal = 0;
     let PangramsFound = 0;
     let TotalPoints = 0;
-    // let GeniusScore = 173;
     let GeniusScore = await getGeniusScore();
     let Char3Score = 0;
     
@@ -408,8 +407,8 @@ function waitForCondition(welcome, queenBee) {
             document.querySelector('.sb-modal-list')?.querySelector('li:last-of-type');
         const score = +geniusElement?.innerText.replace(/\D/g, '');
         document.querySelector('.sb-modal-close').click();
-        // return score;
-        return 102;
+        return score;
+        // return 0;
 
         function waitForElement(selector) {
             return new Promise(resolveElement => {
@@ -418,7 +417,7 @@ function waitForCondition(welcome, queenBee) {
                     if (element) {
                         resolveElement(element);
                     } else {
-                        setTimeout(checkForElement, 10);
+                        setTimeout(checkForElement, 30);
                     }
                 };
                 checkForElement();
