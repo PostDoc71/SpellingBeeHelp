@@ -402,7 +402,7 @@ function waitForCondition(welcome, queenBee) {
         [...document.querySelectorAll(".pz-dropdown__button")][0].click();
         [...document.querySelectorAll(".pz-dropdown__button")][2].click();
         await waitForElement('.sb-modal-body');
-        
+        setTimeout(blankFn, 50);
         const geniusElement =       // menus for logged-in and logged-out
             document.querySelectorAll('.sb-modal-ranks__rank-points')[0] ||
             document.querySelector('.sb-modal-list')?.querySelector('li:last-of-type');
@@ -424,6 +424,10 @@ function waitForCondition(welcome, queenBee) {
                 checkForElement();
             });
         }
+
+        function blankFn() {
+            return;
+        };
     }
 
     /* ----- Saved Settings Cookie ----- */
