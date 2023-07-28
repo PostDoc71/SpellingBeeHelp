@@ -402,13 +402,14 @@ function waitForCondition(welcome, queenBee) {
         [...document.querySelectorAll(".pz-dropdown__button")][0].click();
         [...document.querySelectorAll(".pz-dropdown__button")][2].click();
         await waitForElement('.sb-modal-body');
+        
         const geniusElement =       // menus for logged-in and logged-out
             document.querySelectorAll('.sb-modal-ranks__rank-points')[0] ||
             document.querySelector('.sb-modal-list')?.querySelector('li:last-of-type');
         const score = +geniusElement?.innerText.replace(/\D/g, '');
         document.querySelector('.sb-modal-close').click();
-        // return score;
-        return 85;
+        return score;
+        // return 0;
 
         function waitForElement(selector) {
             return new Promise(resolveElement => {
@@ -417,7 +418,7 @@ function waitForCondition(welcome, queenBee) {
                     if (element) {
                         resolveElement(element);
                     } else {
-                        setTimeout(checkForElement, 30);
+                        setTimeout(checkForElement, 10);
                     }
                 };
                 checkForElement();
