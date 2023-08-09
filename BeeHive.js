@@ -408,8 +408,8 @@ function waitForCondition(welcome, queenBee) {
             document.querySelector('.sb-modal-list')?.querySelector('li:last-of-type');
         const score = +geniusElement?.innerText.replace(/\D/g, '');
         document.querySelector('.sb-modal-close').click();
-        return score;
-        return 99;
+        // return score;
+        return 133;
 
         function waitForElement(selector) {
             return new Promise(resolveElement => {
