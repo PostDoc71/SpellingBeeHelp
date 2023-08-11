@@ -402,14 +402,14 @@ function waitForCondition(welcome, queenBee) {
         [...document.querySelectorAll(".pz-dropdown__button")][0].click();
         [...document.querySelectorAll(".pz-dropdown__button")][2].click();
         await waitForElement('.sb-modal-body');
-        setTimeout(blankFn, 100);    // DEBUG-IS A TIMEOUT NEEDED?
+        setTimeout(blankFn, 1000);    // DEBUG-IS A TIMEOUT NEEDED?
         const geniusElement =       // menus for logged-in and logged-out
             document.querySelectorAll('.sb-modal-ranks__rank-points')[0] ||
             document.querySelector('.sb-modal-list')?.querySelector('li:last-of-type');
         const score = +geniusElement?.innerText.replace(/\D/g, '');
         document.querySelector('.sb-modal-close').click();
-        // return score;
-        return 88;
+        return score;
+        return 0;
 
         function waitForElement(selector) {
             return new Promise(resolveElement => {
