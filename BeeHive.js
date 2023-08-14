@@ -402,13 +402,13 @@ function waitForCondition(welcome, queenBee) {
         [...document.querySelectorAll(".pz-dropdown__button")][0].click();
         [...document.querySelectorAll(".pz-dropdown__button")][2].click();
         await waitForElement('.sb-modal-body');
-        setTimeout(blankFn, 1000);    // DEBUG-IS A TIMEOUT NEEDED?
+        // setTimeout(blankFn, 1000);    // DEBUG-IS A TIMEOUT NEEDED?
         const geniusElement =       // menus for logged-in and logged-out
             document.querySelectorAll('.sb-modal-ranks__rank-points')[0] ||
             document.querySelector('.sb-modal-list')?.querySelector('li:last-of-type');
         const score = +geniusElement?.innerText.replace(/\D/g, '');
         document.querySelector('.sb-modal-close').click();
-        // return score;
+        return score;
         return 76;
 
         function waitForElement(selector) {
@@ -558,6 +558,7 @@ function waitForCondition(welcome, queenBee) {
         CreateElTable0();
         FormatTable0();
         CreateElTable1();
+
         UpdateList();
         return;
     }
@@ -760,10 +761,15 @@ function waitForCondition(welcome, queenBee) {
 // DISPLAY FUNCTIONS
 //======================================
 
-    function DisplayMetaStats () {
-       if (WordsTotal === WordsFound) {
-            El.MetaStats3.innerHTML = 'QUEEN BEE:&nbsp<br>Total pangrams:&nbsp<br>Pangrams Found:&nbsp';
-            GeniusScore = TotalPoints;
+    async function DisplayMetaStats () {
+
+        // KLUDGE FOR RANKINGS SUBMENU INCOMPLETE SCORE DISPLAY
+        if ((GeniusScore < WordsTotal / 2) || GeniusScore == 999) GeniusScore = await getGeniusScore();
+        if (GeniusScore < WordsTotal / 2) GeniusScore = 999;
+        
+        if (WordsTotal === WordsFound) {
+        El.MetaStats3.innerHTML = 'QUEEN BEE:&nbsp<br>Total pangrams:&nbsp<br>Pangrams Found:&nbsp';
+        GeniusScore = TotalPoints;
         }
         El.MetaStats2.innerHTML = TotalPoints + '<br>' + WordsTotal + `<br>` + WordsFound;
         El.MetaStats4.innerHTML = GeniusScore + '<br>' + PangramsTotal + `<br>` + PangramsFound;
