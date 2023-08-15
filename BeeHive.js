@@ -116,7 +116,8 @@ function waitForCondition(welcome, queenBee) {
     let PangramsTotal = 0;
     let PangramsFound = 0;
     let TotalPoints = 0;
-    let GeniusScore = await getGeniusScore();
+    // let GeniusScore = await getGeniusScore();
+    let GeniusScore = 0;
     let Char3Score = 0;
     
     // Words data
@@ -407,7 +408,7 @@ function waitForCondition(welcome, queenBee) {
             document.querySelector('.sb-modal-list')?.querySelector('li:last-of-type');
         const score = +geniusElement?.innerText.replace(/\D/g, '');
         document.querySelector('.sb-modal-close').click();
-        // return score;
+        return score;
         return 78;
 
         function waitForElement(selector) {
@@ -423,11 +424,6 @@ function waitForCondition(welcome, queenBee) {
                 checkForElement();
             });
         }
-
-    //     function blankFn() {
-    //         return;
-    //     };
-    
     }
 
     /* ----- Saved Settings Cookie ----- */
@@ -764,12 +760,12 @@ function waitForCondition(welcome, queenBee) {
     async function DisplayMetaStats () {
 
         // KLUDGE FOR RANKINGS SUBMENU INCOMPLETE SCORE DISPLAY
-        if ((GeniusScore < WordsTotal / 2) || GeniusScore == 999) GeniusScore = await getGeniusScore();
-        if (GeniusScore < WordsTotal / 2) GeniusScore = 999;
+        if ((GeniusScore < TotalPoints / 2) || GeniusScore == 999) GeniusScore = await getGeniusScore();
+        if (GeniusScore < TotalPoints / 2) GeniusScore = 999;
         
         if (WordsTotal === WordsFound) {
-        El.MetaStats3.innerHTML = 'QUEEN BEE:&nbsp<br>Total pangrams:&nbsp<br>Pangrams Found:&nbsp';
-        GeniusScore = TotalPoints;
+            El.MetaStats3.innerHTML = 'QUEEN BEE:&nbsp<br>Total pangrams:&nbsp<br>Pangrams Found:&nbsp';
+            GeniusScore = TotalPoints;
         }
         El.MetaStats2.innerHTML = TotalPoints + '<br>' + WordsTotal + `<br>` + WordsFound;
         El.MetaStats4.innerHTML = GeniusScore + '<br>' + PangramsTotal + `<br>` + PangramsFound;
