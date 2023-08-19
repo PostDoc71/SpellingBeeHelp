@@ -117,7 +117,6 @@ function waitForCondition(welcome, queenBee) {
     let PangramsFound = 0;
     let TotalPoints = 0;
     let GeniusScore = await getGeniusScore();
-    // let GeniusScore = 0;
     let Char3Score = 0;
     
     // Words data
@@ -403,13 +402,56 @@ function waitForCondition(welcome, queenBee) {
         [...document.querySelectorAll(".pz-dropdown__button")][0].click();
         [...document.querySelectorAll(".pz-dropdown__button")][2].click();
         await waitForElement('.sb-modal-body');
-        const geniusElement =       // menus for logged-in and logged-out
-            document.querySelectorAll('.sb-modal-ranks__rank-points')[0] ||
-            document.querySelector('.sb-modal-list')?.querySelector('li:last-of-type');
-        const score = +geniusElement?.innerText.replace(/\D/g, '');
-        document.querySelector('.sb-modal-close').click();
+
+
+// DEBUG
+
+// https://stackoverflow.com/questions/38731882/extracting-data-from-a-table-using-javascript
+const extractData = (tableId, mapper) => {
+    const myTab = document.getElementById(tableId);
+    if (myTab) {
+      const data = [...myTab.rows].map((r) => [...r.cells].map((c) => c.innerText));
+      return data.map(mapper);
+    }
+  };
+  
+  // Call the function and do whatever you want with the data
+  const data = +extractData('.sb-modal-ranks__list', (x) => x[7]);
+  document.querySelector('.sb-modal-close').click();
+  return data;
+  
+
+// https://stackoverflow.com/questions/13763111/javascript-get-all-table-tr-values
+// let table = document.getElementsByClassName("sb-modal-ranks__list");
+// alert(table);
+// var rows = document.getElementsByTagName(table)[0].rows;
+// alert(rows);
+// var last = rows[1];
+// var cell = last.cells[3];
+// alert(cell);
+// var value = +cell.innerHTML
+// document.querySelector('.sb-modal-close').click();
+// return value;
+
+        // let table = document.getElementsByClassName("sb-modal-ranks__list");
+        // alert(table);
+        // let tr = table.getElementsByTagName("tr");
+        // alert('here we are');
+        // alert(tr);
+        // let td = tr[1].getElementsByTagName("td")[3];
+        // let gs = +td.innerHTML;
+        // alert(gs);
+        // document.querySelector('.sb-modal-close').click();
+        // return gs;
+
+
+        // const geniusElement =       // menus for logged-in and logged-out
+        //     document.querySelectorAll('.sb-modal-ranks__rank-points')[0] ||
+        //     document.querySelector('.sb-modal-list')?.querySelector('li:last-of-type');
+        // const score = +geniusElement?.innerText.replace(/\D/g, '');
+        // document.querySelector('.sb-modal-close').click();
         // return score;
-        return 137;
+        // return 137;
 
         function waitForElement(selector) {
             return new Promise(resolveElement => {
@@ -758,11 +800,6 @@ function waitForCondition(welcome, queenBee) {
 //======================================
 
     async function DisplayMetaStats () {
-
-        // KLUDGE FOR RANKINGS SUBMENU INCOMPLETE SCORE DISPLAY
-        // if ((GeniusScore < TotalPoints / 2) || GeniusScore == 999) GeniusScore = await getGeniusScore();
-        // if (GeniusScore < TotalPoints / 2) GeniusScore = 999;
-        
         if (WordsTotal === WordsFound) {
             El.MetaStats3.innerHTML = 'QUEEN BEE:&nbsp<br>Total pangrams:&nbsp<br>Pangrams Found:&nbsp';
             GeniusScore = TotalPoints;
