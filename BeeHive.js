@@ -409,7 +409,7 @@ function waitForCondition(welcome, queenBee) {
         const score = +geniusElement?.innerText.replace(/\D/g, '');
         document.querySelector('.sb-modal-close').click();
         // return score;
-        return 77;
+        return 137;
 
         function waitForElement(selector) {
             return new Promise(resolveElement => {
