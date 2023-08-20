@@ -399,29 +399,32 @@ function waitForCondition(welcome, queenBee) {
 
     /* ----- Open Rankings pop-up for GeniusScore ----- */
     async function getGeniusScore() {
-
-        return 154;
-        
         [...document.querySelectorAll(".pz-dropdown__button")][0].click();
         [...document.querySelectorAll(".pz-dropdown__button")][2].click();
         await waitForElement('.sb-modal-body');
+        let myTab = document.querySelector('.sb-modal-ranks__list').innerHTML;
+        let gs1 = myTab.indexOf('Genius');
+        let gs2 = myTab.indexOf('</tr', gs1 + 10);
+        let gs = +myTab.slice(gs1, gs2).replace(/\D/g, '');
+        document.querySelector('.sb-modal-close').click();
+        return gs;
 
-
-// DEBUG
+// DEBUGS THAT DON'T WORK
 
 // https://stackoverflow.com/questions/38731882/extracting-data-from-a-table-using-javascript
-const extractData = (tableId, mapper) => {
-    const myTab = document.getElementById(tableId);
-    if (myTab) {
-      const data = [...myTab.rows].map((r) => [...r.cells].map((c) => c.innerText));
-      return data.map(mapper);
-    }
-  };
+// const extractData = (tableId, mapper) => {
+//     const myTab = document.getElementById(tableId);
+//     alert(myTab);
+//     if (myTab) {
+//       const data = [...myTab.rows].map((r) => [...r.cells].map((c) => c.innerText));
+//       return data.map(mapper);
+//     }
+//   };
   
-  // Call the function and do whatever you want with the data
-  const data = +extractData('.sb-modal-ranks__list', (x) => x[7]);
-  document.querySelector('.sb-modal-close').click();
-  return data;
+//   // Call the function and do whatever you want with the data
+//   const data = +extractData('.sb-modal-ranks__list', (x) => x[7]);
+//   document.querySelector('.sb-modal-close').click();
+//   return data;
   
 
 // https://stackoverflow.com/questions/13763111/javascript-get-all-table-tr-values
@@ -436,25 +439,24 @@ const extractData = (tableId, mapper) => {
 // document.querySelector('.sb-modal-close').click();
 // return value;
 
-        // let table = document.getElementsByClassName("sb-modal-ranks__list");
-        // alert(table);
-        // let tr = table.getElementsByTagName("tr");
-        // alert('here we are');
-        // alert(tr);
-        // let td = tr[1].getElementsByTagName("td")[3];
-        // let gs = +td.innerHTML;
-        // alert(gs);
-        // document.querySelector('.sb-modal-close').click();
-        // return gs;
+// let table = document.getElementsByClassName("sb-modal-ranks__list");
+// alert(table);
+// let tr = table.getElementsByTagName("tr");
+// alert('here we are');
+// alert(tr);
+// let td = tr[1].getElementsByTagName("td")[3];
+// let gs = +td.innerHTML;
+// alert(gs);
+// document.querySelector('.sb-modal-close').click();
+// return gs;
 
-
+        // Original query
         // const geniusElement =       // menus for logged-in and logged-out
         //     document.querySelectorAll('.sb-modal-ranks__rank-points')[0] ||
         //     document.querySelector('.sb-modal-list')?.querySelector('li:last-of-type');
         // const score = +geniusElement?.innerText.replace(/\D/g, '');
         // document.querySelector('.sb-modal-close').click();
         // return score;
-        // return 137;
 
         function waitForElement(selector) {
             return new Promise(resolveElement => {
