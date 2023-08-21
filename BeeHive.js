@@ -116,7 +116,7 @@ function waitForCondition(welcome, queenBee) {
     let PangramsTotal = 0;
     let PangramsFound = 0;
     let TotalPoints = 0;
-    let GeniusScore = await getGeniusScore();
+    let GeniusScore = 999;
     let Char3Score = 0;
     
     // Words data
@@ -399,6 +399,8 @@ function waitForCondition(welcome, queenBee) {
 
     /* ----- Open Rankings pop-up for GeniusScore ----- */
     async function getGeniusScore() {
+        return 144;
+        
         [...document.querySelectorAll(".pz-dropdown__button")][0].click();
         [...document.querySelectorAll(".pz-dropdown__button")][2].click();
         await waitForElement('.sb-modal-body');
@@ -548,7 +550,6 @@ function waitForCondition(welcome, queenBee) {
         temp = paragraphs[2].textContent.split(/[^0-9]+/);
             WordsTotal = +temp[1];
             TotalPoints = +temp[2];
-            Char3Score = GeniusScore + (+Math.floor((TotalPoints - GeniusScore) / 4));
             PangramsTotal = temp[3];
             if (temp[4] > 0) PangramsTotal = PangramsTotal + ' (' + temp[4] + ' Perfect)';
             
@@ -755,6 +756,7 @@ function waitForCondition(welcome, queenBee) {
 //======================================
 
     function UpdateList () {
+
         // Cull ProcessedWords from WordList => new words into processList
         let processList = [];
         let inputList = [...El.WordList.querySelectorAll('li')];
@@ -805,6 +807,10 @@ function waitForCondition(welcome, queenBee) {
 //======================================
 
     async function DisplayMetaStats () {
+        if ((GeniusScore < (2 * TotalPoints / 3)) || (GeniusScore == 999)) {
+            GeniusScore = await getGeniusScore();
+            Char3Score = GeniusScore + (+Math.floor((TotalPoints - GeniusScore) / 4));
+        }
         if (WordsTotal === WordsFound) {
             El.MetaStats3.innerHTML = 'QUEEN BEE:&nbsp<br>Total pangrams:&nbsp<br>Pangrams Found:&nbsp';
             GeniusScore = TotalPoints;
