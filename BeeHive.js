@@ -399,7 +399,7 @@ function waitForCondition(welcome, queenBee) {
 
     /* ----- Open Rankings pop-up for GeniusScore ----- */
     async function getGeniusScore() {
-        return 144;
+        return 66;
         
         [...document.querySelectorAll(".pz-dropdown__button")][0].click();
         [...document.querySelectorAll(".pz-dropdown__button")][2].click();
