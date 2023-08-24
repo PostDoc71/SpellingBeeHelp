@@ -399,12 +399,14 @@ function waitForCondition(welcome, queenBee) {
 
     /* ----- Open Rankings pop-up for GeniusScore ----- */
     async function getGeniusScore() {
-        return 66;
+        return 103;
         
         [...document.querySelectorAll(".pz-dropdown__button")][0].click();
         [...document.querySelectorAll(".pz-dropdown__button")][2].click();
         await waitForElement('.sb-modal-body');
+        // setTimeout(doNothing, 3000);
         let myTab = document.querySelector('.sb-modal-ranks__list').innerHTML;
+        alert(myTab);
         let gs1 = myTab.indexOf('Genius');
         let gs2 = myTab.indexOf('</tr', gs1 + 10);
         let gs = +myTab.slice(gs1, gs2).replace(/\D/g, '');
@@ -472,6 +474,10 @@ function waitForCondition(welcome, queenBee) {
                 };
                 checkForElement();
             });
+        }
+
+        function doNothing() {
+            return;
         }
     }
 
