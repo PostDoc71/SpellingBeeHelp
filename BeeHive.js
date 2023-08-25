@@ -400,17 +400,24 @@ function waitForCondition(welcome, queenBee) {
 
     /* ----- Open Rankings pop-up for GeniusScore ----- */
     async function getGeniusScore() {
-        return 257;              // DEBUG
-        
+        let myTab, toGo, current, br, score;
         [...document.querySelectorAll(".pz-dropdown__button")][0].click();
         [...document.querySelectorAll(".pz-dropdown__button")][2].click();
         await waitForElement('.sb-modal-body');
-        let myTab = document.querySelector('.sb-modal-ranks__list').innerHTML;
-        let gs1 = myTab.indexOf('Genius');
-        let gs2 = myTab.indexOf('</tr', gs1 + 10);
-        let gs = +myTab.slice(gs1, gs2).replace(/\D/g, '');
+        const geniusElement =       // menus for logged-in and logged-out
+            document.querySelectorAll('.sb-modal-ranks__rank-points')[0] ||
+            document.querySelector('.sb-modal-list')?.querySelector('li:last-of-type');
+        score = +geniusElement?.innerText.replace(/\D/g, '');
+        if (score < (.65 * TotalPoints)) {
+            myTab = document.querySelector('.sb-modal-ranks__list').innerHTML;
+            br = myTab.indexOf('to Genius');
+            toGo = +myTab.slice(br-14, br).replace(/\D/g, '');
+            br = myTab.indexOf('current-score');
+            current = +myTab.slice(br+13, br+19).replace(/\D/g, '');
+            score = current + toGo;
+        }
         document.querySelector('.sb-modal-close').click();          // DEBUG - HIDE THIS LINE TO DISPLAY RANKINGS 
-        return gs;
+        return score;
         
 // DEBUGS THAT DON'T WORK
 
@@ -556,6 +563,7 @@ function waitForCondition(welcome, queenBee) {
             WordsTotal = +temp[1];
             TotalPoints = +temp[2];
             PangramsTotal = temp[3];
+            Char3Score = ((TotalPoints - GeniusScore) * .25) + GeniusScore;
             if (temp[4] > 0) PangramsTotal = PangramsTotal + ' (' + temp[4] + ' Perfect)';
             
         // char1Table (temporary data)
@@ -812,10 +820,6 @@ function waitForCondition(welcome, queenBee) {
 //======================================
 
     async function DisplayMetaStats () {
-        // if ((GeniusScore < (0.65 * TotalPoints)) || (GeniusScore == 999)) {         // DEBUG
-        //     GeniusScore = await getGeniusScore();
-        //     Char3Score = GeniusScore + (+Math.floor((TotalPoints - GeniusScore) / 4));
-        // }
         if (WordsTotal === WordsFound) {
             El.MetaStats3.innerHTML = 'QUEEN BEE:&nbsp<br>Total pangrams:&nbsp<br>Pangrams Found:&nbsp';
             GeniusScore = TotalPoints;
