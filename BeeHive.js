@@ -116,7 +116,7 @@ function waitForCondition(welcome, queenBee) {
     let PangramsTotal = 0;
     let PangramsFound = 0;
     let TotalPoints = 0;
-    let GeniusScore = 999;
+    let GeniusScore = await getGeniusScore();
     let Char3Score = 0;
     
     // Words data
@@ -370,6 +370,7 @@ function waitForCondition(welcome, queenBee) {
     /* ----- Detect device ----- */
     function detectPhoneDevice () {     
         return false;
+
         // if (navigator.userAgent.match(/Android/i)
         // || navigator.userAgent.match(/webOS/i)
         // || navigator.userAgent.match(/iPhone/i)
@@ -399,20 +400,18 @@ function waitForCondition(welcome, queenBee) {
 
     /* ----- Open Rankings pop-up for GeniusScore ----- */
     async function getGeniusScore() {
-        return 103;
+        return 257;              // DEBUG
         
         [...document.querySelectorAll(".pz-dropdown__button")][0].click();
         [...document.querySelectorAll(".pz-dropdown__button")][2].click();
         await waitForElement('.sb-modal-body');
-        // setTimeout(doNothing, 3000);
         let myTab = document.querySelector('.sb-modal-ranks__list').innerHTML;
-        alert(myTab);
         let gs1 = myTab.indexOf('Genius');
         let gs2 = myTab.indexOf('</tr', gs1 + 10);
         let gs = +myTab.slice(gs1, gs2).replace(/\D/g, '');
-        document.querySelector('.sb-modal-close').click();
+        document.querySelector('.sb-modal-close').click();          // DEBUG - HIDE THIS LINE TO DISPLAY RANKINGS 
         return gs;
-
+        
 // DEBUGS THAT DON'T WORK
 
 // https://stackoverflow.com/questions/38731882/extracting-data-from-a-table-using-javascript
@@ -476,7 +475,7 @@ function waitForCondition(welcome, queenBee) {
             });
         }
 
-        function doNothing() {
+        function scrapeGS() {
             return;
         }
     }
@@ -813,10 +812,10 @@ function waitForCondition(welcome, queenBee) {
 //======================================
 
     async function DisplayMetaStats () {
-        if ((GeniusScore < (2 * TotalPoints / 3)) || (GeniusScore == 999)) {
-            GeniusScore = await getGeniusScore();
-            Char3Score = GeniusScore + (+Math.floor((TotalPoints - GeniusScore) / 4));
-        }
+        // if ((GeniusScore < (0.65 * TotalPoints)) || (GeniusScore == 999)) {         // DEBUG
+        //     GeniusScore = await getGeniusScore();
+        //     Char3Score = GeniusScore + (+Math.floor((TotalPoints - GeniusScore) / 4));
+        // }
         if (WordsTotal === WordsFound) {
             El.MetaStats3.innerHTML = 'QUEEN BEE:&nbsp<br>Total pangrams:&nbsp<br>Pangrams Found:&nbsp';
             GeniusScore = TotalPoints;
@@ -1079,9 +1078,6 @@ function waitForCondition(welcome, queenBee) {
             El.TableHeader.removeAttribute("hidden");
             El.ContainerTables.removeAttribute("hidden");
             El.ContainerCheckbox.removeAttribute("hidden");
-            // ShowChar3
-            //     ? El.Table1.removeAttribute("hidden")
-            //     : El.Table0.removeAttribute("hidden");
             if (+(document.querySelector(".sb-progress-value").innerText) >= Char3Score) 
                 El.Char3Container.removeAttribute("hidden");
             if (!ShowChar3) El.ContainerT0Checkbox.removeAttribute("hidden");
