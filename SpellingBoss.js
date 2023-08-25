@@ -1,3 +1,5 @@
+// version 1.26
+
 (() => {
 'use strict';
 

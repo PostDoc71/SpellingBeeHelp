@@ -206,7 +206,7 @@ function waitForCondition(welcome, queenBee) {
         <p class="inputs"><input id="saveSettings" class="bh-hover" type="checkbox">&nbspSave * settings</input></p>
         <p class="inputs" style="margin-top: 3px"><button id="bh-defineBtn" class="bh-hover">Definitions</button></p>
         <p class="inputs" style="margin-top: 3px"><button id="bh-share" class="bh-hover">Share this program</button></p>
-        <p class="inputs" id="bh-button"><br>Bee Hive Release 1.25<br><br></p>
+        <p class="inputs" id="bh-button"><br>Bee Hive Release 1.26<br><br></p>
         <div align='center' id="bh-counter" hidden>
             <a href='https://www.free-website-hit-counter.com'>
                 <img src='https://www.free-website-hit-counter.com/c.php?d=5&id=146730&s=36' border='0' alt='Free Website Hit Counter'>
@@ -419,55 +419,6 @@ function waitForCondition(welcome, queenBee) {
         document.querySelector('.sb-modal-close').click();          // DEBUG - HIDE THIS LINE TO DISPLAY RANKINGS 
         return score;
         
-// DEBUGS THAT DON'T WORK
-
-// https://stackoverflow.com/questions/38731882/extracting-data-from-a-table-using-javascript
-// const extractData = (tableId, mapper) => {
-//     const myTab = document.getElementById(tableId);
-//     alert(myTab);
-//     if (myTab) {
-//       const data = [...myTab.rows].map((r) => [...r.cells].map((c) => c.innerText));
-//       return data.map(mapper);
-//     }
-//   };
-  
-//   // Call the function and do whatever you want with the data
-//   const data = +extractData('.sb-modal-ranks__list', (x) => x[7]);
-//   document.querySelector('.sb-modal-close').click();
-//   return data;
-  
-
-// https://stackoverflow.com/questions/13763111/javascript-get-all-table-tr-values
-// let table = document.getElementsByClassName("sb-modal-ranks__list");
-// alert(table);
-// var rows = document.getElementsByTagName(table)[0].rows;
-// alert(rows);
-// var last = rows[1];
-// var cell = last.cells[3];
-// alert(cell);
-// var value = +cell.innerHTML
-// document.querySelector('.sb-modal-close').click();
-// return value;
-
-// let table = document.getElementsByClassName("sb-modal-ranks__list");
-// alert(table);
-// let tr = table.getElementsByTagName("tr");
-// alert('here we are');
-// alert(tr);
-// let td = tr[1].getElementsByTagName("td")[3];
-// let gs = +td.innerHTML;
-// alert(gs);
-// document.querySelector('.sb-modal-close').click();
-// return gs;
-
-        // Original query
-        // const geniusElement =       // menus for logged-in and logged-out
-        //     document.querySelectorAll('.sb-modal-ranks__rank-points')[0] ||
-        //     document.querySelector('.sb-modal-list')?.querySelector('li:last-of-type');
-        // const score = +geniusElement?.innerText.replace(/\D/g, '');
-        // document.querySelector('.sb-modal-close').click();
-        // return score;
-
         function waitForElement(selector) {
             return new Promise(resolveElement => {
                 const checkForElement = () => {
@@ -480,10 +431,6 @@ function waitForCondition(welcome, queenBee) {
                 };
                 checkForElement();
             });
-        }
-
-        function scrapeGS() {
-            return;
         }
     }
 
