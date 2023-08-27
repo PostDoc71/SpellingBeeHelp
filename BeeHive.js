@@ -2,30 +2,30 @@
 
 (async () => {            // OUTER SHELL
 
-if (window.hiveLoaded) return;                  // Do not allow to launch more than once
-window.hiveLoaded = true;
+    if (window.hiveLoaded) return;                  // Do not allow to launch more than once
+    window.hiveLoaded = true;
 
-/* ----- Do not launch while on Welcome or Queen Bee pages ----- */
-await waitForCondition(
-    document.getElementById('js-hook-pz-moment__welcome'),      // Welcome page
-    document.getElementById('js-hook-pz-moment__congrats')      // Queen Bee page
-);
-function waitForCondition(welcome, queenBee) {
-    return new Promise(resolveElement => {
-        const checkForCondition = () => {           // both frames invisible
-            if (welcome.clientHeight + queenBee.clientHeight === 0) {
-                resolveElement(true);
-            } else {
-                setTimeout(checkForCondition, 10);
-            }
-        };
-        checkForCondition();
-    });
-}
+    /* ----- Do not launch while on Welcome or Queen Bee pages ----- */
+    await waitForCondition(
+        document.getElementById('js-hook-pz-moment__welcome'),      // Welcome page
+        document.getElementById('js-hook-pz-moment__congrats')      // Queen Bee page
+    );
+    function waitForCondition(welcome, queenBee) {
+        return new Promise(resolveElement => {
+            const checkForCondition = () => {           // both frames invisible
+                if (welcome.clientHeight + queenBee.clientHeight === 0) {
+                    resolveElement(true);
+                } else {
+                    setTimeout(checkForCondition, 10);
+                }
+            };
+            checkForCondition();
+        });
+    }
 
-//======================================
-// MAIN CONSTANTS AND VARIABLES
-//======================================
+    //======================================
+    // MAIN CONSTANTS AND VARIABLES
+    //======================================
 
     // System data
     const devicePhone = detectPhoneDevice();    // boolean, for future use
@@ -116,7 +116,7 @@ function waitForCondition(welcome, queenBee) {
     let PangramsTotal = 0;
     let PangramsFound = 0;
     let TotalPoints = 0;
-    let GeniusScore = await getGeniusScore();
+    let GeniusScore = 0;
     let Char3Score = 0;
     
     // Words data
@@ -403,19 +403,11 @@ function waitForCondition(welcome, queenBee) {
         let myTab, toGo, current, br, score;
         [...document.querySelectorAll(".pz-dropdown__button")][0].click();
         [...document.querySelectorAll(".pz-dropdown__button")][2].click();
-        await waitForElement('.sb-modal-body');
-        // const geniusElement =       // menus for logged-in and logged-out
-        //     document.querySelectorAll('.sb-modal-ranks__rank-points')[0] ||
-        //     document.querySelector('.sb-modal-list')?.querySelector('li:last-of-type');
-        // score = +geniusElement?.innerText.replace(/\D/g, '');
-        // if (score < (.65 * TotalPoints)) {
-            myTab = document.querySelector('.sb-modal-ranks__list').innerHTML;
-            br = myTab.indexOf('to Genius');
-            toGo = +myTab.slice(br-14, br).replace(/\D/g, '');
-            br = myTab.indexOf('current-score');
-            current = +myTab.slice(br+13, br+19).replace(/\D/g, '');
-            score = current + toGo;
-        // }
+        const modalBody = await waitForElement('.sb-modal-body');
+        const geniusElement =       // menus for logged-in and logged-out
+            modalBody.querySelectorAll('.sb-modal-ranks__rank-points')[1] ||
+            document.querySelector('.sb-modal-list')?.querySelector('li:last-of-type');
+        score = +geniusElement?.innerText.replace(/\D/g, '');
         document.querySelector('.sb-modal-close').click(); 
         return score;
         
@@ -499,7 +491,7 @@ function waitForCondition(welcome, queenBee) {
 //======================================
 
     // Read HINTS page and generate all tables/lists
-    function InitializeHints () {
+    async function InitializeHints () {
         let temp;
         let wordLengths = [];       // word lengths, appended to header
         const paragraphs  = HintsHTML.querySelectorAll('p');
@@ -510,6 +502,7 @@ function waitForCondition(welcome, queenBee) {
             WordsTotal = +temp[1];
             TotalPoints = +temp[2];
             PangramsTotal = temp[3];
+            GeniusScore = await getGeniusScore();
             Char3Score = ((TotalPoints - GeniusScore) * .25) + GeniusScore;
             if (temp[4] > 0) PangramsTotal = PangramsTotal + ' (' + temp[4] + ' Perfect)';
             
