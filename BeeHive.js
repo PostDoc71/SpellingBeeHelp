@@ -404,19 +404,19 @@ function waitForCondition(welcome, queenBee) {
         [...document.querySelectorAll(".pz-dropdown__button")][0].click();
         [...document.querySelectorAll(".pz-dropdown__button")][2].click();
         await waitForElement('.sb-modal-body');
-        const geniusElement =       // menus for logged-in and logged-out
-            document.querySelectorAll('.sb-modal-ranks__rank-points')[0] ||
-            document.querySelector('.sb-modal-list')?.querySelector('li:last-of-type');
-        score = +geniusElement?.innerText.replace(/\D/g, '');
-        if (score < (.65 * TotalPoints)) {
+        // const geniusElement =       // menus for logged-in and logged-out
+        //     document.querySelectorAll('.sb-modal-ranks__rank-points')[0] ||
+        //     document.querySelector('.sb-modal-list')?.querySelector('li:last-of-type');
+        // score = +geniusElement?.innerText.replace(/\D/g, '');
+        // if (score < (.65 * TotalPoints)) {
             myTab = document.querySelector('.sb-modal-ranks__list').innerHTML;
             br = myTab.indexOf('to Genius');
             toGo = +myTab.slice(br-14, br).replace(/\D/g, '');
             br = myTab.indexOf('current-score');
             current = +myTab.slice(br+13, br+19).replace(/\D/g, '');
             score = current + toGo;
-        }
-        document.querySelector('.sb-modal-close').click();          // DEBUG - HIDE THIS LINE TO DISPLAY RANKINGS 
+        // }
+        document.querySelector('.sb-modal-close').click(); 
         return score;
         
         function waitForElement(selector) {
