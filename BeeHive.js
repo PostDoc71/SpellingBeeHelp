@@ -28,7 +28,6 @@
     //======================================
 
     // System data
-    const devicePhone = detectPhoneDevice();    // boolean, for future use
     const hintDiv = setUpHintDiv();             // initialize DOM
     const HintsHTML = await getHints();         // data from Spelling Bee page
 
@@ -206,7 +205,7 @@
         <p class="inputs"><input id="saveSettings" class="bh-hover" type="checkbox">&nbspSave * settings</input></p>
         <p class="inputs" style="margin-top: 3px"><button id="bh-defineBtn" class="bh-hover">Definitions</button></p>
         <p class="inputs" style="margin-top: 3px"><button id="bh-share" class="bh-hover">Share this program</button></p>
-        <p class="inputs" id="bh-button"><br>Bee Hive Release 1.26<br><br></p>
+        <p class="inputs" id="bh-button"><br>Bee Hive Release 1.27<br><br></p>
         <div align='center' id="bh-counter" hidden>
             <a href='https://www.free-website-hit-counter.com'>
                 <img src='https://www.free-website-hit-counter.com/c.php?d=5&id=146730&s=36' border='0' alt='Free Website Hit Counter'>
@@ -346,12 +345,7 @@
         </style>
         `;
         let gameScreen;
-        if (devicePhone) {
-            gameScreen = document.querySelector('#portal-game-moments');
-        } else { 
-            // gameScreen = document.querySelector('#js-hook-pz-moment__game');
-            gameScreen = document.getElementById('js-hook-pz-moment__game');
-        }
+        gameScreen = document.getElementById('js-hook-pz-moment__game');
         const parent = gameScreen.parentElement;
         const container = document.createElement('div');
         container.style.display = 'flex';
@@ -366,23 +360,6 @@
         hintDiv.innerHTML = HTMLcontent;
         return hintDiv;
     }
-
-    /* ----- Detect device ----- */
-    function detectPhoneDevice () {     
-        return false;
-
-        // if (navigator.userAgent.match(/Android/i)
-        // || navigator.userAgent.match(/webOS/i)
-        // || navigator.userAgent.match(/iPhone/i)
-        // || navigator.userAgent.match(/iPad/i)
-        // || navigator.userAgent.match(/iPod/i)
-        // || navigator.userAgent.match(/BlackBerry/i)
-        // || navigator.userAgent.match(/Windows Phone/i)) {
-        //    return true ;
-        // } else {
-        //    return false ;
-        // }
-     }
 
     /* ----- Open Today's Hints page for data ----- */
     async function getHints() {
@@ -400,14 +377,13 @@
 
     /* ----- Open Rankings pop-up for GeniusScore ----- */
     async function getGeniusScore() {
-        let myTab, toGo, current, br, score;
         [...document.querySelectorAll(".pz-dropdown__button")][0].click();
         [...document.querySelectorAll(".pz-dropdown__button")][2].click();
         const modalBody = await waitForElement('.sb-modal-body');
         const geniusElement =       // menus for logged-in and logged-out
             modalBody.querySelectorAll('.sb-modal-ranks__rank-points')[1] ||
-            document.querySelector('.sb-modal-list')?.querySelector('li:last-of-type');
-        score = +geniusElement?.innerText.replace(/\D/g, '');
+            document.querySelector('.sb-modal-list li:last-of-type');
+        let score = +geniusElement?.innerText.replace(/\D/g, '');
         document.querySelector('.sb-modal-close').click(); 
         return score;
         
@@ -426,66 +402,80 @@
         }
     }
 
-    /* ----- Saved Settings Cookie ----- */
+    /* ----- Saved Settings ----- */
     function RetrieveSavedSettings () {
-        let setting = getCookie("beehiveSetting");
-        if (setting === "true") { 
-            let blank = getCookie("beehiveBlank");
-            let remain = getCookie("beehiveRemaining");
-            let subTot = getCookie("beehiveSubtotal");
-            let hideHint = getCookie("beehiveHideHints");
+
+// DEBUG - ERASE AFTER 9/8/23
+function getCookie(name) {
+    let matches = document.cookie.match(new RegExp(
+        "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+    ));
+    return matches ? decodeURIComponent(matches[1]) : undefined;
+}
+if (getCookie("beehiveSetting") === "true") {
+    localStorage.beehiveSetting = true;
+    localStorage.beehiveBlank = getCookie("beehiveBlank");
+    localStorage.beehiveRemaining = getCookie("beehiveRemaining");
+    localStorage.beehiveSubtotal = getCookie("beehiveSubtotal");
+    localStorage.beehiveHideHints = getCookie("beehiveHideHints");
+}
+document.cookie = "beehiveSetting=0; max-age=0";
+document.cookie = "beehiveBlank=0; max-age=0";
+document.cookie = "beehiveRemaining=0; max-age=0";
+document.cookie = "beehiveSubtotal=0; max-age=0";
+document.cookie = "beehiveHideHints=0; max-age=0";
+// END DEBUG
+
+        let setting = getSavedSetting(localStorage.beehiveSetting);
+        if (setting) { 
+            let blank = getSavedSetting(localStorage.beehiveBlank);
+            let remain = getSavedSetting(localStorage.beehiveRemaining);
+            let subTot = getSavedSetting(localStorage.beehiveSubtotal);
+            let hideHint = getSavedSetting(localStorage.beehiveHideHints);
             El.SaveSettings.click();
             ToggleSaveSettings();
-            if (blank === "true") {
+            if (blank) {
                 El.ShowBlankCells.click();
                 ToggleHiddenCells();
-                setCookie("beehiveBlank=true");
+                localStorage.beehiveBlank = "true";
             } else {
-                setCookie("beehiveBlank=false");
+                localStorage.beehiveBlank = "false";
             }
-            if (remain === "true") {
+            if (remain) {
                 El.ShowRemaining.click();
                 ToggleFoundRemaining();
-                setCookie("beehiveRemaining=true");
+                localStorage.beehiveRemaining= "true";
             } else {
-                setCookie("beehiveRemaining=false");
+                localStorage.beehiveRemaining = "false";
             }
-            if (subTot === "true") {
+            if (subTot) {
                 El.SubTotalsAtTop.click();
                 SubTotalsAtTop = true;
-                setCookie("beehiveSubtotal=true");
+                localStorage.beehiveSubtotal = "true";
             } else {
-                setCookie("beehiveSubtotal=false");
+                localStorage.beehiveSubtotal = "false";
             }
-            if (hideHint === "true") {
+            if (hideHint) {
                 El.HideHintsButton.click();
                 ToggleHints();
-                setCookie("beehiveHideHints=true");
+                localStorage.beehiveHideHints = "true";
             } else {
-                setCookie("beehiveHideHints=false");
+                localStorage.beehiveHideHints = "false";
             }
          } else {
-            setCookie("beehiveBlank=false");
-            setCookie("beehiveRemaining=false");
-            setCookie("beehiveSubtotal=false");
-            setCookie("beehiveHideHints=false");
-            setCookie("beehiveSetting=false");
+            localStorage.beehiveBlank = "false";
+            localStorage.beehiveRemaining = "false";
+            localStorage.beehiveSubtotal = "false";
+            localStorage.beehiveHideHints = "false";
+            localStorage.beehiveSetting = "false";
          }
         return;
     }
 
-    function setCookie (name) {
-        document.cookie = name + "; max-age=700000";    // expires in ~8 days
-        return;
+    function getSavedSetting (setting) {
+        if (setting == "true") return true;
+        else return false;
     }
-
-    function getCookie(name) {
-        let matches = document.cookie.match(new RegExp(
-          "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
-        ));
-        return matches ? decodeURIComponent(matches[1]) : undefined;
-    }
-
 //======================================
 // MAIN SUPPORTING FUNCTIONS: INITIALIZE HINTS/TABLES
 //======================================
@@ -629,7 +619,7 @@
         return;
     }
 
-    function CreateElTable0() {
+    function  CreateElTable0() {
         for (let y = 0; y < TableTotalRows; y++) {
             let rowObj = [];
             let rowEl = document.createElement('tr');
@@ -890,7 +880,7 @@
 
     function ToggleHiddenCells (KLUDGE) {     // DEBUG - KLUDGE patch
         ShowBlankCells = !ShowBlankCells; 
-        ShowBlankCells ? setCookie("beehiveBlank=true") : setCookie("beehiveBlank=false");
+        ShowBlankCells ? localStorage.beehiveBlank = "true" : localStorage.beehiveBlank = "false";
         TablePtrs.forEach(item => {
             if (item.total === item.found) {         // No Char1
                 for (let row = item.rowHeader - 2; row <= item.rowEndChar1; row++) {
@@ -926,7 +916,7 @@
 
     function ToggleFoundRemaining () {
         ShowRemaining = !ShowRemaining;
-        ShowRemaining ? setCookie("beehiveRemaining=true") : setCookie("beehiveRemaining=false");
+        ShowRemaining ? localStorage.beehiveRemaining = "true" : localStorage.beehiveRemaining = "false";
         if (!ShowChar3) {
             if (ShowRemaining) {
                 El.Legend.innerHTML = `Σ = <font color="mediumvioletred"><b>TOTAL words</b>
@@ -945,7 +935,7 @@
         let rowstart;
         let rowend;
         SubTotalsAtTop = !SubTotalsAtTop;
-        SubTotalsAtTop ? setCookie("beehiveSubtotal=true") : setCookie("beehiveSubtotal=false");
+        SubTotalsAtTop ? localStorage.beehiveSubtotal = "true" : localStorage.beehiveSubtotal = "false";
 
         // Table and TablePtrs
         TablePtrs.forEach(item => {
@@ -1013,12 +1003,12 @@
     function ToggleHints () {
         HideHints = !HideHints;
         if (HideHints) {
-            setCookie("beehiveHideHints=true");
+            localStorage.beehiveHideHints = "true";
             El.TableHeader.setAttribute("hidden", "");
             El.ContainerTables.setAttribute("hidden", "");
             El.ContainerCheckbox.setAttribute("hidden", "");
         } else {
-            setCookie("beehiveHideHints=false");
+            localStorage.beehiveHideHints = "false";
             El.TableHeader.removeAttribute("hidden");
             El.ContainerTables.removeAttribute("hidden");
             El.ContainerCheckbox.removeAttribute("hidden");
@@ -1032,7 +1022,7 @@
  
     function ToggleSaveSettings () {
         SaveSetting = !SaveSetting;
-        SaveSetting ? setCookie("beehiveSetting=true") : setCookie("beehiveSetting=false");
+        SaveSetting ? localStorage.beehiveSetting = "true" : localStorage.beehiveSetting = "false";
         return;
     }
 

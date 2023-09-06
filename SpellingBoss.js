@@ -19,7 +19,7 @@ if (oops) {
     'PLEASE NOTE', 'Continue');
 
 /* ----- Launch only from NYT Spelling Bee website ----- */
-} else if (document.URL === 'https://www.nytimes.com/puzzles/spelling-bee') {
+} else if (document.URL.startsWith('https://www.nytimes.com/puzzles/spelling-bee')) {
     // HIT COUNTER at bottom right corner
     const counterObj = document.getElementsByTagName("body")[0].appendChild(document.createElement("div"));
         counterObj.innerHTML = `<div align='right' class="bh-counter">
