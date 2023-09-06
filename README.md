@@ -1,6 +1,6 @@
 <H3>BEE HIVE</H3>
 
-Bee Hive inserts itself onto the NYT Spelling Bee web page, then tallies your <br>
+Bee Hive inserts itself onto the NYT Spelling Bee web page, then tallies your<br>
 found words onto the Spelling Bee HINTS grid.   This only works on computers, not<br>
 phones.<br>
 To use this program, you must start it from a bookmarklet.  You only need to do the<br>
