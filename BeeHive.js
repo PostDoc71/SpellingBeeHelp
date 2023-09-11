@@ -404,28 +404,6 @@
 
     /* ----- Saved Settings ----- */
     function RetrieveSavedSettings () {
-
-// DEBUG - ERASE AFTER 9/8/23
-function getCookie(name) {
-    let matches = document.cookie.match(new RegExp(
-        "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
-    ));
-    return matches ? decodeURIComponent(matches[1]) : undefined;
-}
-if (getCookie("beehiveSetting") === "true") {
-    localStorage.beehiveSetting = true;
-    localStorage.beehiveBlank = getCookie("beehiveBlank");
-    localStorage.beehiveRemaining = getCookie("beehiveRemaining");
-    localStorage.beehiveSubtotal = getCookie("beehiveSubtotal");
-    localStorage.beehiveHideHints = getCookie("beehiveHideHints");
-}
-document.cookie = "beehiveSetting=0; max-age=0";
-document.cookie = "beehiveBlank=0; max-age=0";
-document.cookie = "beehiveRemaining=0; max-age=0";
-document.cookie = "beehiveSubtotal=0; max-age=0";
-document.cookie = "beehiveHideHints=0; max-age=0";
-// END DEBUG
-
         let setting = getSavedSetting(localStorage.beehiveSetting);
         if (setting) { 
             let blank = getSavedSetting(localStorage.beehiveBlank);
