@@ -116,6 +116,7 @@
     let PangramsFound = 0;
     let TotalPoints = 0;
     let GeniusScore = 0;
+
     let Char3Score = 0;
     
     // Words data
@@ -175,7 +176,7 @@
 //======================================
 // SYSTEM DATA/FUNCTIONS
 //======================================
-
+  
     /* ----- Create DOM for Bee Hive HTML ----- */
     function setUpHintDiv() {
         const HTMLcontent = `
@@ -362,11 +363,10 @@
     }
 
     /* ----- Open Today's Hints page for data ----- */
-    async function getHints() {
+    async function getHints() { 
         const hintsUrl = 'https://www.nytimes.com/' +
         window.gameData.today.printDate.replaceAll('-', '/') +
             '/crosswords/spelling-bee-forum.html';
-
         const hints = await fetch(hintsUrl).then(response => response.text()).then(html => {
             const div = document.createElement('div');
             div.innerHTML = html;                                       // translates string to DOM
@@ -378,12 +378,14 @@
     /* ----- Open Rankings pop-up for GeniusScore ----- */
     async function getGeniusScore() {
         [...document.querySelectorAll(".pz-dropdown__button")][0].click();
+        const dropDownList = await waitForElement('.pz-dropdown__list');
         [...document.querySelectorAll(".pz-dropdown__button")][2].click();
         const modalBody = await waitForElement('.sb-modal-body');
         const geniusElement =       // menus for logged-in and logged-out
-            modalBody.querySelectorAll('.sb-modal-ranks__rank-points')[1] ||
-            document.querySelector('.sb-modal-list li:last-of-type');
+            modalBody.querySelectorAll('.sb-modal-ranks__rank-points')[1];
+            // || document.querySelector('.sb-modal-list li:last-of-type');
         let score = +geniusElement?.innerText.replace(/\D/g, '');
+        alert(score);;
         document.querySelector('.sb-modal-close').click(); 
         return score;
         
@@ -472,6 +474,7 @@
             PangramsTotal = temp[3];
             GeniusScore = await getGeniusScore();
             Char3Score = ((TotalPoints - GeniusScore) * .25) + GeniusScore;
+            alert(GeniusScore); alert(Char3Score);
             if (temp[4] > 0) PangramsTotal = PangramsTotal + ' (' + temp[4] + ' Perfect)';
             
         // char1Table (temporary data)
@@ -713,7 +716,7 @@
         });
 
         DisplayMetaStats();
-        if (+(document.querySelector(".sb-progress-value").innerText) >= Char3Score)
+        if (+(document.querySelector(".sb-progress-value").innerText) >= 0)
             El.Char3Container.removeAttribute("hidden");
         if (ShowChar3) {
             Display3Char();
