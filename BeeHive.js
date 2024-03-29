@@ -385,7 +385,6 @@
             modalBody.querySelectorAll('.sb-modal-ranks__rank-points')[1];
             // || document.querySelector('.sb-modal-list li:last-of-type');
         let score = +geniusElement?.innerText.replace(/\D/g, '');
-        alert(score);;
         document.querySelector('.sb-modal-close').click(); 
         return score;
         
@@ -474,7 +473,6 @@
             PangramsTotal = temp[3];
             GeniusScore = await getGeniusScore();
             Char3Score = ((TotalPoints - GeniusScore) * .25) + GeniusScore;
-            alert(GeniusScore); alert(Char3Score);
             if (temp[4] > 0) PangramsTotal = PangramsTotal + ' (' + temp[4] + ' Perfect)';
             
         // char1Table (temporary data)
