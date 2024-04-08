@@ -195,7 +195,7 @@
             <table id="table1" hidden></table>
         </div>
         <div id="checkboxcontainer">
-            <p id="char3container" class="inputs"><input id="char3" class="bh-hover" type="checkbox">&nbspHelp! - show 3-letter hints</input></p>
+            <p id="char3container" class="inputs" hidden><input id="char3" class="bh-hover" type="checkbox">&nbspHelp! - show 3-letter hints</input></p>
             <div id="t0checkboxcontainer">
                 <p class="inputs"><input id="hideEmptyCells" class="bh-hover" type="checkbox">&nbsp* Show completed rows and columns</input></p>
                 <p class="inputs"><input id="showRemaining" class="bh-hover" type="checkbox">&nbsp* Show number of words remaining</input></p>
@@ -472,7 +472,7 @@
             TotalPoints = +temp[2];
             PangramsTotal = temp[3];
             GeniusScore = await getGeniusScore();
-            Char3Score = ((TotalPoints - GeniusScore) * .25) + GeniusScore;
+            Char3Score = TotalPoints * .775;
             if (temp[4] > 0) PangramsTotal = PangramsTotal + ' (' + temp[4] + ' Perfect)';
             
         // char1Table (temporary data)
@@ -663,7 +663,6 @@
             Cell1.push(rowObj);
             El.Table1.appendChild(rowEl);
         }    
-        El.Char3Container.setAttribute("hidden", '');
         Cell1[1][0].element.innerHTML = `Hint`;
         Cell1[1][0].element.style.borderBottom = "1px solid black";
         Cell1[1][1].element.innerHTML = `&nbsp&nbsp&nbsp`;
@@ -714,7 +713,7 @@
         });
 
         DisplayMetaStats();
-        if (+(document.querySelector(".sb-progress-value").innerText) >= 0)
+        if (+(document.querySelector(".sb-progress-value").innerText) >= Char3Score)
             El.Char3Container.removeAttribute("hidden");
         if (ShowChar3) {
             Display3Char();
