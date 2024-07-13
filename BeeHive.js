@@ -403,58 +403,80 @@
         }
     }
 
-    /* ----- Saved Settings ----- */
     function RetrieveSavedSettings () {
-        let setting = getSavedSetting(localStorage.beehiveSetting);
+        let setting = (GetStorage('beehiveSetting') == 'true');
         if (setting) { 
-            let blank = getSavedSetting(localStorage.beehiveBlank);
-            let remain = getSavedSetting(localStorage.beehiveRemaining);
-            let subTot = getSavedSetting(localStorage.beehiveSubtotal);
-            let hideHint = getSavedSetting(localStorage.beehiveHideHints);
+            let blank = (GetStorage('beehiveBlank') == 'true');
+            let remain = (GetStorage('beehiveRemaining') == 'true');
+            let subTot = (GetStorage('beehiveSubtotal') == 'true');
+            let hideHint = (GetStorage('beehiveHideHints') == 'true');
             El.SaveSettings.click();
             ToggleSaveSettings();
             if (blank) {
                 El.ShowBlankCells.click();
                 ToggleHiddenCells();
-                localStorage.beehiveBlank = "true";
+                SetStorage('beehiveBlank', 'true');
             } else {
-                localStorage.beehiveBlank = "false";
+                SetStorage('beehiveBlank', 'false');
             }
             if (remain) {
                 El.ShowRemaining.click();
                 ToggleFoundRemaining();
-                localStorage.beehiveRemaining= "true";
+                SetStorage('beehiveRemaining', 'true');
             } else {
-                localStorage.beehiveRemaining = "false";
+                SetStorage('beehiveRemaining', 'false');
             }
             if (subTot) {
                 El.SubTotalsAtTop.click();
                 SubTotalsAtTop = true;
-                localStorage.beehiveSubtotal = "true";
+                SetStorage('beehiveSubtotal', 'true');
             } else {
-                localStorage.beehiveSubtotal = "false";
+                SetStorage('beehiveSubtotal', 'false');
             }
             if (hideHint) {
                 El.HideHintsButton.click();
                 ToggleHints();
-                localStorage.beehiveHideHints = "true";
+                SetStorage('beehiveHideHints', 'true');
             } else {
-                localStorage.beehiveHideHints = "false";
+                SetStorage('beehiveHideHints', 'false');
             }
          } else {
-            localStorage.beehiveBlank = "false";
-            localStorage.beehiveRemaining = "false";
-            localStorage.beehiveSubtotal = "false";
-            localStorage.beehiveHideHints = "false";
-            localStorage.beehiveSetting = "false";
+            SetStorage('beehiveBlank', 'false');
+            SetStorage('beehiveRemaining', 'false');
+            SetStorage('beehiveSubtotal', 'false');
+            SetStorage('beehiveHideHints', 'false');
+            SetStorage('beehiveSetting', 'false');
          }
         return;
     }
 
-    function getSavedSetting (setting) {
-        if (setting == "true") return true;
-        else return false;
+    function GetStorage (key) {
+
+        return localStorage.getItem(key);
+
+        // return localStorage.key;
+
+        // return getCookie(key);
+
+        function getCookie(name) {
+            let matches = document.cookie.match(new RegExp(
+              "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+            ));
+            return matches ? decodeURIComponent(matches[1]) : undefined;
+          }
     }
+
+    function SetStorage (key, setting) {
+
+        localStorage.setItem(key, setting);
+
+        // localStorage.key = setting;
+
+        // document.cookie = key + "=" + setting + "; max-age=3600";
+
+        return;
+    }
+
 //======================================
 // MAIN SUPPORTING FUNCTIONS: INITIALIZE HINTS/TABLES
 //======================================
@@ -464,7 +486,6 @@
         let temp;
         let wordLengths = [];       // word lengths, appended to header
         const paragraphs  = HintsHTML.querySelectorAll('p');
-
         // MetaStats (permanent)
         LetterList = paragraphs[1].textContent.replace(/\s/g, '').toUpperCase();
         temp = paragraphs[2].textContent.split(/[^0-9]+/);
@@ -472,7 +493,7 @@
             TotalPoints = +temp[2];
             PangramsTotal = temp[3];
             GeniusScore = await getGeniusScore();
-            Char3Score = TotalPoints * .775;
+            Char3Score = TotalPoints * .77;
             if (temp[4] > 0) PangramsTotal = PangramsTotal + ' (' + temp[4] + ' Perfect)';
             
         // char1Table (temporary data)
@@ -677,7 +698,6 @@
 //======================================
 
     function UpdateList () {
-
         // Cull ProcessedWords from WordList => new words into processList
         let processList = [];
         let inputList = [...El.WordList.querySelectorAll('li')];
@@ -858,7 +878,8 @@
 
     function ToggleHiddenCells (KLUDGE) {     // DEBUG - KLUDGE patch
         ShowBlankCells = !ShowBlankCells; 
-        ShowBlankCells ? localStorage.beehiveBlank = "true" : localStorage.beehiveBlank = "false";
+//        ShowBlankCells ? localStorage.beehiveBlank = "true" : localStorage.beehiveBlank = "false";
+        ShowBlankCells ? SetStorage('beehiveBlank', "true") : SetStorage('beehiveBlank', "false");
         TablePtrs.forEach(item => {
             if (item.total === item.found) {         // No Char1
                 for (let row = item.rowHeader - 2; row <= item.rowEndChar1; row++) {
@@ -894,7 +915,8 @@
 
     function ToggleFoundRemaining () {
         ShowRemaining = !ShowRemaining;
-        ShowRemaining ? localStorage.beehiveRemaining = "true" : localStorage.beehiveRemaining = "false";
+//        ShowRemaining ? localStorage.beehiveRemaining = "true" : localStorage.beehiveRemaining = "false";
+        ShowRemaining ? SetStorage('beehiveRemaining', "true") : SetStorage('beehiveRemaining', "false");
         if (!ShowChar3) {
             if (ShowRemaining) {
                 El.Legend.innerHTML = `Σ = <font color="mediumvioletred"><b>TOTAL words</b>
@@ -913,7 +935,8 @@
         let rowstart;
         let rowend;
         SubTotalsAtTop = !SubTotalsAtTop;
-        SubTotalsAtTop ? localStorage.beehiveSubtotal = "true" : localStorage.beehiveSubtotal = "false";
+//        SubTotalsAtTop ? localStorage.beehiveSubtotal = "true" : localStorage.beehiveSubtotal = "false";
+        SubTotalsAtTop ? SetStorage('beehiveSubtotal', "true") : SetStorage('beehiveSubtotal', "false");
 
         // Table and TablePtrs
         TablePtrs.forEach(item => {
@@ -981,12 +1004,12 @@
     function ToggleHints () {
         HideHints = !HideHints;
         if (HideHints) {
-            localStorage.beehiveHideHints = "true";
+            SetStorage('beehiveHideHints', "true");
             El.TableHeader.setAttribute("hidden", "");
             El.ContainerTables.setAttribute("hidden", "");
             El.ContainerCheckbox.setAttribute("hidden", "");
         } else {
-            localStorage.beehiveHideHints = "false";
+            SetStorage('beehiveHideHints', "false");
             El.TableHeader.removeAttribute("hidden");
             El.ContainerTables.removeAttribute("hidden");
             El.ContainerCheckbox.removeAttribute("hidden");
@@ -1000,7 +1023,7 @@
  
     function ToggleSaveSettings () {
         SaveSetting = !SaveSetting;
-        SaveSetting ? localStorage.beehiveSetting = "true" : localStorage.beehiveSetting = "false";
+        SaveSetting ? SetStorage('beehiveSetting', "true") : SetStorage('beehiveSetting', "false");
         return;
     }
 
