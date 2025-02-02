@@ -45,6 +45,7 @@
         MetaStats2: document.getElementById('metastats2'),
         MetaStats3: document.getElementById('metastats3'),
         MetaStats4: document.getElementById('metastats4'),
+        Genius: document.getElementById('genius'),
         TableHeader: document.getElementById('header'),
         Legend: document.getElementById('legend'),
         ContainerTables: document.getElementById('tablescontainer'),
@@ -113,6 +114,7 @@
     let WordsTotal = 0;
     let WordsFound = 0;
     let PangramsTotal = 0;
+    let PerfectPangrams = '';
     let PangramsFound = 0;
     let TotalPoints = 0;
     let GeniusScore = 0;
@@ -180,10 +182,13 @@
     /* ----- Create DOM for Bee Hive HTML ----- */
     function setUpHintDiv() {
         const HTMLcontent = `
-        <table>
-            <td id="metastats1">Total points:&nbsp<br>Total words:&nbsp<br>Words Found:&nbsp</td>
+        <table><tr>
+            <td id="genius"></td>
+            </tr></table>
+        <br><table>
+            <td id="metastats1"><br>Words:<br>Pangrams:</td>
             <td id="metastats2"></td>
-            <td id="metastats3">Genius level:&nbsp<br>Total pangrams:&nbsp<br>Pangrams Found:&nbsp</td>
+            <td id="metastats3"></td>
             <td id="metastats4"></td>
         </table>
         <br><table id="header"><tr>
@@ -206,7 +211,7 @@
         <p class="inputs"><input id="saveSettings" class="bh-hover" type="checkbox">&nbspSave * settings</input></p>
         <p class="inputs" style="margin-top: 3px"><button id="bh-defineBtn" class="bh-hover">Definitions</button></p>
         <p class="inputs" style="margin-top: 3px"><button id="bh-share" class="bh-hover">Share this program</button></p>
-        <p class="inputs" id="bh-button"><br>Bee Hive Release 1.27<br><br></p>
+        <p class="inputs" id="bh-button"><br>Bee Hive Release 1.30<br><br></p>
         <div align='center' id="bh-counter" hidden>
             <a href='https://www.free-website-hit-counter.com'>
                 <img src='https://www.free-website-hit-counter.com/c.php?d=5&id=146730&s=36' border='0' alt='Free Website Hit Counter'>
@@ -225,6 +230,10 @@
             </div>
         </div>
         <style>
+            #genius {
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: 90%;
+            }
             #metastats1 {
                 font-family: Arial, Helvetica, sans-serif;
                 font-size: 90%;
@@ -240,16 +249,15 @@
             #metastats3 {
                 font-family: Arial, Helvetica, sans-serif;
                 font-size: 90%;
-                width: 21ch;
+                width: 6ch;
                 margin-left: 1ch;
                 text-align: right;
             }
             #metastats4 {
                 font-family: Arial, Helvetica, sans-serif;
-                margin-left: 1ch;
                 font-size: 90%;
-                text-align: left;
-                width: 14ch;
+                text-align: right;
+                width: 12ch;
             }
             #header td {
                 font-family: Arial, Helvetica, sans-serif;
@@ -442,8 +450,13 @@
             }
          } else {
             SetStorage('beehiveBlank', 'false');
-            SetStorage('beehiveRemaining', 'false');
-            SetStorage('beehiveSubtotal', 'false');
+            El.ShowRemaining.click();
+            ToggleFoundRemaining();
+            SetStorage('beehiveRemaining', 'true');
+            El.SubTotalsAtTop.click();
+            SubTotalsAtTop = true;
+            SetStorage('beehiveSubtotal', 'true');
+            // SetStorage('beehiveSubtotal', 'false');
             SetStorage('beehiveHideHints', 'false');
             SetStorage('beehiveSetting', 'false');
          }
@@ -451,29 +464,11 @@
     }
 
     function GetStorage (key) {
-
         return localStorage.getItem(key);
-
-        // return localStorage.key;
-
-        // return getCookie(key);
-
-        function getCookie(name) {
-            let matches = document.cookie.match(new RegExp(
-              "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
-            ));
-            return matches ? decodeURIComponent(matches[1]) : undefined;
-          }
     }
 
     function SetStorage (key, setting) {
-
         localStorage.setItem(key, setting);
-
-        // localStorage.key = setting;
-
-        // document.cookie = key + "=" + setting + "; max-age=3600";
-
         return;
     }
 
@@ -493,8 +488,11 @@
             TotalPoints = +temp[2];
             PangramsTotal = temp[3];
             GeniusScore = await getGeniusScore();
+            El.Genius.innerHTML = 'Total points = '  + TotalPoints + ';  Genius level = ' + GeniusScore;
             Char3Score = TotalPoints * .77;
-            if (temp[4] > 0) PangramsTotal = PangramsTotal + ' (' + temp[4] + ' Perfect)';
+            El.MetaStats3.innerHTML = 'Total' + '<br>' + WordsTotal + '<br>' + PangramsTotal;
+            if (temp[4] > '0') PerfectPangrams = '<br><br>(' + temp[4] + ' perfect)';
+            El.MetaStats4.innerHTML = PerfectPangrams;
             
         // char1Table (temporary data)
         let char1Table = [...HintsHTML.querySelectorAll('table tr')]
@@ -733,12 +731,13 @@
         });
 
         DisplayMetaStats();
-        if (+(document.querySelector(".sb-progress-value").innerText) >= Char3Score)
-            El.Char3Container.removeAttribute("hidden");
-        if (ShowChar3) {
-            Display3Char();
-        } else {
-            DisplayTable();
+        if (+(document.querySelector(".sb-progress-value").innerText) >= Char3Score) {
+            if (ShowChar3) {
+                El.Char3Container.removeAttribute("hidden");
+                Display3Char();
+            } else {
+                DisplayTable();
+            }
         }
         return;
     }
@@ -747,14 +746,12 @@
 // DISPLAY FUNCTIONS
 //======================================
 
-    async function DisplayMetaStats () {
+    function DisplayMetaStats () {
         if (WordsTotal === WordsFound) {
-            El.MetaStats3.innerHTML = 'QUEEN BEE:&nbsp<br>Total pangrams:&nbsp<br>Pangrams Found:&nbsp';
-            GeniusScore = TotalPoints;
+            El.MetaStats4.innerHTML = 'QUEEN BEE';
         }
-        El.MetaStats2.innerHTML = TotalPoints + '<br>' + WordsTotal + `<br>` + WordsFound;
-        El.MetaStats4.innerHTML = GeniusScore + '<br>' + PangramsTotal + `<br>` + PangramsFound;
-        return;
+        El.MetaStats2.innerHTML = 'Found' + '<br>' + WordsFound + '<br>' + PangramsFound;
+        DisplayTable();
     }
 
     function DisplayTable () {
