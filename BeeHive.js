@@ -735,15 +735,6 @@
         });
 
         DisplayMetaStats();
-            // DEBUG
-        // if (+(document.querySelector(".sb-progress-value").innerText) >= Char3Score) {
-        //     if (ShowChar3) {
-        //         El.Char3Container.removeAttribute("hidden");
-        //         Display3Char();
-        //     } 
-            // else {
-            //     DisplayTable();
-            // }
         if (+(document.querySelector(".sb-progress-value").innerText) >= Char3Score)
             El.Char3Container.removeAttribute("hidden");
         if (!ShowChar3) DisplayTable()
@@ -1040,6 +1031,7 @@
         } else {
             El.Legend.innerHTML = `CONGRATULATIONS, YOUR MAJESTY!<br>&nbsp`;
         }
+        El.Genius.innerHTML = 'QUEEN BEE = '  + TotalPoints;
         El.Table0.setAttribute("hidden", "");
         El.Table1.setAttribute("hidden", "");
         El.TableHeader.removeAttribute("hidden");
