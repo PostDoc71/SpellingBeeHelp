@@ -1032,8 +1032,8 @@
             El.Legend.innerHTML = `CONGRATULATIONS, YOUR MAJESTY!<br>&nbsp`;
         }
         El.Genius.innerHTML = 'QUEEN BEE = '  + TotalPoints;
-        El.Table0.setAttribute("hidden", "");
-        El.Table1.setAttribute("hidden", "");
+        //El.Table0.setAttribute("hidden", "");
+        //El.Table1.setAttribute("hidden", "");
         El.TableHeader.removeAttribute("hidden");
     }
 
